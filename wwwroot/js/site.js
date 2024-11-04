@@ -2,3 +2,8 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+<script>
+    document.querySelector('.dark-mode-toggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+    });
+</script>
