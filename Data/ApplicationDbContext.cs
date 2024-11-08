@@ -20,8 +20,8 @@ namespace BeatStore_SoftUni.Data
                 .HasConversion<Guid>();
         }
         
-        // public virtual DbSet<Beat> Beats { get; set; }
-        // public virtual DbSet<Playlist> Playlists { get; set; }
-        // public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<Beat> Beats { get; set; }
+        public virtual DbSet<Playlist> Playlists { get; set; }
+        public virtual DbSet<Comment> Comments { get; set; }
     }
 }
