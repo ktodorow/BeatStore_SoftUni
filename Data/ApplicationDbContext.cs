@@ -18,10 +18,27 @@ namespace BeatStore_SoftUni.Data
             modelBuilder.Entity<ApplicationUser>()
                 .Property(u => u.Id)
                 .HasConversion<Guid>();
+            //
+            modelBuilder.Entity<BeatPlaylist>()
+                .HasKey(bp => new { bp.BeatId, bp.PlaylistId });
+
+            modelBuilder.Entity<BeatPlaylist>()
+                .HasOne(bp => bp.Beat)
+                .WithMany(b => b.BeatPlaylists)
+                .HasForeignKey(bp => bp.BeatId);
+
+            modelBuilder.Entity<BeatPlaylist>()
+                .HasOne(bp => bp.Playlist)
+                .WithMany(p => p.BeatPlaylists)
+                .HasForeignKey(bp => bp.PlaylistId);
+
+            modelBuilder.Entity<BeatPlaylist>()
+                .ToTable("BeatsPlaylists");
         }
         
         public virtual DbSet<Beat> Beats { get; set; }
         public virtual DbSet<Playlist> Playlists { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
+        public virtual DbSet<BeatPlaylist> BeatsPlaylists { get; set; }
     }
 }

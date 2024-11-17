@@ -27,5 +27,5 @@ public class Playlist
     public DateTime DateCreated { get; set; }
 
     // Navigation properties
-    public virtual ICollection<Beat> Beats { get; set; } = new HashSet<Beat>();
+    public virtual ICollection<BeatPlaylist> BeatPlaylists { get; set; } = new HashSet<BeatPlaylist>();
 }
