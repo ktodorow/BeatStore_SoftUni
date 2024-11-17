@@ -21,4 +21,8 @@ public static class EntityValidationConstants
     public const int CommentContentMaxLength = 200;
     public const int RatingMinValue = 1;
     public const int RatingMaxValue = 5;
+    public const int GenreNameMinLength = 2;
+    public const int GenreNameMaxLength = 50;
+    public const int GenreDescriptionMinLength = 5;
+    public const int GenreDescriptionMaxLength = 200;
 }

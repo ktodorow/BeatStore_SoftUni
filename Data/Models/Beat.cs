@@ -39,7 +39,8 @@ public class Beat
 
     // Navigation properties
     public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
-    public virtual ICollection<BeatPlaylist> BeatPlaylists { get; set; } = new HashSet<BeatPlaylist>();
     public virtual ICollection<Rating> Ratings { get; set; } = new HashSet<Rating>();
     public virtual ICollection<Purchase> Purchases { get; set; } = new HashSet<Purchase>();
+    public virtual ICollection<BeatPlaylist> BeatPlaylists { get; set; } = new HashSet<BeatPlaylist>();
+    public virtual ICollection<BeatGenre> BeatGenres { get; set; } = new HashSet<BeatGenre>();
 }

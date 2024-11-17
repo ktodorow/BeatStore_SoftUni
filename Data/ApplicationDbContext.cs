@@ -34,6 +34,22 @@ namespace BeatStore_SoftUni.Data
 
             modelBuilder.Entity<BeatPlaylist>()
                 .ToTable("BeatsPlaylists");
+            //
+            modelBuilder.Entity<BeatGenre>()
+                .HasKey(bg => new { bg.BeatId, bg.GenreId });
+
+            modelBuilder.Entity<BeatGenre>()
+                .HasOne(bg => bg.Beat)
+                .WithMany(b => b.BeatGenres)
+                .HasForeignKey(bg => bg.BeatId);
+
+            modelBuilder.Entity<BeatGenre>()
+                .HasOne(bg => bg.Genre)
+                .WithMany(g => g.BeatGenres)
+                .HasForeignKey(bg => bg.GenreId);
+
+            modelBuilder.Entity<BeatGenre>()
+                .ToTable("BeatsGenres");
         }
         
         public virtual DbSet<Beat> Beats { get; set; }
@@ -42,5 +58,7 @@ namespace BeatStore_SoftUni.Data
         public virtual DbSet<BeatPlaylist> BeatsPlaylists { get; set; }
         public virtual DbSet<Rating> Ratings { get; set; }
         public virtual DbSet<Purchase> Purchases { get; set; }
+        public virtual DbSet<Genre> Genres { get; set; }
+        public virtual DbSet<BeatGenre> BeatsGenres { get; set; }
     }
 }
