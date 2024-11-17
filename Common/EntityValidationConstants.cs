@@ -19,5 +19,6 @@ public static class EntityValidationConstants
     public const int PlaylistDescriptionMaxLength = 100;
     public const int CommentContentMinLength = 1;
     public const int CommentContentMaxLength = 200;
-
+    public const int RatingMinValue = 1;
+    public const int RatingMaxValue = 5;
 }

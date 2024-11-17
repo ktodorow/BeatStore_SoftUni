@@ -40,5 +40,6 @@ namespace BeatStore_SoftUni.Data
         public virtual DbSet<Playlist> Playlists { get; set; }
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<BeatPlaylist> BeatsPlaylists { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
     }
 }
