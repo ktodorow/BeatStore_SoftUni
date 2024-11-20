@@ -17,6 +17,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
