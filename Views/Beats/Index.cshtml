@@ -1,0 +1,37 @@
+﻿@model IEnumerable<BeatStore_SoftUni.Data.Models.Beat>
+
+<h2>Beats</h2>
+<p>Here you can browse a list of all available beats.</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Genre</th>
+            <th>Artist</th>
+            <th>Price</th>
+            <th>Date Uploaded</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null)
+        {
+            foreach (var beat in Model)
+            {
+                <tr>
+                    <td>@beat.Title</td>
+                    <td>@beat.Genre</td>
+                    <td>@beat.Artist.UserName</td>
+                    <td>@beat.Price.ToString("C")</td>
+                    <td>@beat.DateUploaded.ToShortDateString()</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5">No beats available yet!</td>
+            </tr>
+        }
+    </tbody>
+</table>
