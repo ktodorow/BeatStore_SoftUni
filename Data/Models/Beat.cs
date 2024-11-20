@@ -35,6 +35,11 @@ public class Beat
     public string AudioFileUrl { get; set; } = null!;
 
     [Required]
+    [MaxLength(BeatCoverArtUrlMaxLength)]
+    [Url]
+    public string CoverArtUrl { get; set; } = null!; 
+
+    [Required]
     public DateTime DateUploaded { get; set; }
 
     // Navigation properties

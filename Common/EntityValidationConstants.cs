@@ -25,4 +25,5 @@ public static class EntityValidationConstants
     public const int GenreNameMaxLength = 50;
     public const int GenreDescriptionMinLength = 5;
     public const int GenreDescriptionMaxLength = 200;
+    public const int BeatCoverArtUrlMaxLength = 2048;
 }
