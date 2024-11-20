@@ -12,13 +12,20 @@ public class BeatsController : Controller
         _context = context;
     }
 
-    // GET: Beats
     public async Task<IActionResult> Index()
     {
-        // Fetch all beats, including the artist details
         var beats = await _context.Beats
-            .Include(b => b.Artist) // Ensure Artist details are included
+            .Include(b => b.Artist) 
             .ToListAsync();
+
+
+        foreach (var beat in beats)
+        {
+            if (string.IsNullOrEmpty(beat.CoverArtUrl))
+            {
+                beat.CoverArtUrl = "/images/default-cover-art.jpg";
+            }
+        }
 
         return View(beats);
     }
