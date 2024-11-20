@@ -37,7 +37,7 @@ public class Beat
     [Required]
     [MaxLength(BeatCoverArtUrlMaxLength)]
     [Url]
-    public string CoverArtUrl { get; set; } = null!; 
+    public string? CoverArtUrl { get; set; }
 
     [Required]
     public DateTime DateUploaded { get; set; }
