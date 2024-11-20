@@ -10,6 +10,4 @@ public class ApplicationUser : IdentityUser<Guid>
     [MaxLength(ProfilePicturePathMaxLength)]
     public string? ProfilePicture { get; set; } //TODO: Set Default Profile Picture
     public DateTime DateJoined { get; set; }
-    public string Role { get; set; } = null!; // e.g., artist, listener
-
 }
