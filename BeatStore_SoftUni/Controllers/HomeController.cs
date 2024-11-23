@@ -1,4 +1,4 @@
-using BeatStore_SoftUni.Models;
+using BeatStore_SoftUni.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

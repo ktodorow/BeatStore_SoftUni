@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BeatStore_SoftUni.Data.Models\BeatStore_SoftUni.Data.Models.csproj" />
     <ProjectReference Include="..\BeatStore_SoftUni.Data\BeatStore_SoftUni.Data.csproj" />
+    <ProjectReference Include="..\BeatStore_SoftUni.ViewModels\BeatStore_SoftUni.ViewModels.csproj" />
   </ItemGroup>
 
 </Project>

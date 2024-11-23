@@ -1,4 +1,4 @@
-namespace BeatStore_SoftUni.Models
+namespace BeatStore_SoftUni.ViewModels
 {
     public class ErrorViewModel
     {
