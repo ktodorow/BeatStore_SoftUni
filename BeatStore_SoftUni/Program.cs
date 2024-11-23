@@ -2,6 +2,7 @@ using BeatStore_SoftUni.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
+using BeatStore_SoftUni.Services.Mapping;
 using BeatStore_SoftUni.Data.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -25,7 +26,9 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-var app = builder.Build();
+WebApplication app = builder.Build();
+
+AutoMapperConfig.RegisterMappings();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
