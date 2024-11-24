@@ -25,7 +25,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
+ 
 WebApplication app = builder.Build();
 
 AutoMapperConfig.RegisterMappings();
