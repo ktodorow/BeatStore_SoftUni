@@ -44,7 +44,7 @@
 
         public async Task<TType> FirstOrDefaultAsync(Expression<Func<TType, bool>> predicate)
         {
-            TType entity= await this.dbSet
+            TType entity = await this.dbSet
                 .FirstOrDefaultAsync(predicate);
 
             return entity;
