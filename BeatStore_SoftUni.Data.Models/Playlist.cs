@@ -8,7 +8,7 @@ namespace BeatStore_SoftUni.Data.Models;
 public class Playlist
 {
     [Key]
-    public Guid PlaylistId { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     public Guid UserId { get; set; }

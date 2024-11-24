@@ -10,7 +10,7 @@ public class Rating
 {
     [Key]
     [Comment("Unique rating identifier")]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     public Guid UserId { get; set; }

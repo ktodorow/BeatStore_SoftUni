@@ -7,7 +7,7 @@ namespace BeatStore_SoftUni.Data.Models;
 public class Beat
 {
     [Key]
-    public Guid BeatId { get; set; }
+    public Guid Id { get; set; }
 
     [Required]
     [MaxLength(BeatTitleMaxLength)]
