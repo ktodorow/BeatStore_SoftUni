@@ -9,18 +9,18 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BeatStore_SoftUni.Migrations
+namespace BeatStore_SoftUni.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241120205909_CoverArtSupportBeat")]
-    partial class CoverArtSupportBeat
+    [Migration("20241127234618_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -100,7 +100,7 @@ namespace BeatStore_SoftUni.Migrations
 
             modelBuilder.Entity("BeatStore_SoftUni.Data.Models.Beat", b =>
                 {
-                    b.Property<Guid>("BeatId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -139,7 +139,7 @@ namespace BeatStore_SoftUni.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.HasKey("BeatId");
+                    b.HasKey("Id");
 
                     b.HasIndex("ArtistId");
 
@@ -180,7 +180,7 @@ namespace BeatStore_SoftUni.Migrations
 
             modelBuilder.Entity("BeatStore_SoftUni.Data.Models.Comment", b =>
                 {
-                    b.Property<Guid>("CommentId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -198,7 +198,7 @@ namespace BeatStore_SoftUni.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("CommentId");
+                    b.HasKey("Id");
 
                     b.HasIndex("BeatId");
 
@@ -229,7 +229,7 @@ namespace BeatStore_SoftUni.Migrations
 
             modelBuilder.Entity("BeatStore_SoftUni.Data.Models.Playlist", b =>
                 {
-                    b.Property<Guid>("PlaylistId")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
@@ -248,7 +248,7 @@ namespace BeatStore_SoftUni.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("PlaylistId");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -285,12 +285,10 @@ namespace BeatStore_SoftUni.Migrations
 
             modelBuilder.Entity("BeatStore_SoftUni.Data.Models.Rating", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
+                        .HasColumnType("uniqueidentifier")
                         .HasComment("Unique rating identifier");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<Guid>("BeatId")
                         .HasColumnType("uniqueidentifier");
@@ -464,13 +462,13 @@ namespace BeatStore_SoftUni.Migrations
                     b.HasOne("BeatStore_SoftUni.Data.Models.Beat", "Beat")
                         .WithMany("BeatGenres")
                         .HasForeignKey("BeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BeatStore_SoftUni.Data.Models.Genre", "Genre")
                         .WithMany("BeatGenres")
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Beat");
@@ -483,13 +481,13 @@ namespace BeatStore_SoftUni.Migrations
                     b.HasOne("BeatStore_SoftUni.Data.Models.Beat", "Beat")
                         .WithMany("BeatPlaylists")
                         .HasForeignKey("BeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BeatStore_SoftUni.Data.Models.Playlist", "Playlist")
                         .WithMany("BeatPlaylists")
                         .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Beat");

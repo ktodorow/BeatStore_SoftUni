@@ -14,12 +14,14 @@
             builder
                 .HasOne(bp => bp.Beat)
                 .WithMany(b => b.BeatPlaylists)
-                .HasForeignKey(bp => bp.BeatId);
+                .HasForeignKey(bp => bp.BeatId)
+                .OnDelete(DeleteBehavior.NoAction); // Retain cascade here
 
             builder
                 .HasOne(bp => bp.Playlist)
                 .WithMany(p => p.BeatPlaylists)
-                .HasForeignKey(bp => bp.PlaylistId);
+                .HasForeignKey(bp => bp.PlaylistId)
+                .OnDelete(DeleteBehavior.NoAction); // Disable cascade here
 
             builder
                 .ToTable("BeatsPlaylists");

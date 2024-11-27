@@ -19,19 +19,10 @@ public class Beat
     [ForeignKey(nameof(ArtistId))]
     public virtual ApplicationUser Artist { get; set; } = null!;
 
-    [Required]
-    [MaxLength(BeatGenreMaxLength)]
-    public string Genre { get; set; } = null!;
-
     public decimal Price { get; set; } // Required by default.
 
     [Required]
-    [Range(BeatDurationMinValue, BeatDurationMaxValue)]
-    public int Duration { get; set; } // Duration in seconds
-
-    [Required]
     [MaxLength(BeatAudioFileUrlMaxLength)]
-    [Url]
     public string AudioFileUrl { get; set; } = null!;
 
     [Required]

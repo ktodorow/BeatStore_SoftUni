@@ -15,12 +15,14 @@
             builder
                 .HasOne(bg => bg.Beat)
                 .WithMany(b => b.BeatGenres)
-                .HasForeignKey(bg => bg.BeatId);
+                .HasForeignKey(bg => bg.BeatId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder
                 .HasOne(bg => bg.Genre)
                 .WithMany(g => g.BeatGenres)
-                .HasForeignKey(bg => bg.GenreId);
+                .HasForeignKey(bg => bg.GenreId)
+                .OnDelete(DeleteBehavior.NoAction);
 
             builder
                 .ToTable("BeatsGenres");

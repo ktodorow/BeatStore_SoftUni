@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BeatStore_SoftUni.Migrations
+namespace BeatStore_SoftUni.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -116,14 +116,6 @@ namespace BeatStore_SoftUni.Migrations
 
                     b.Property<DateTime>("DateUploaded")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("Duration")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Genre")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.Property<Guid?>("GenreId")
                         .HasColumnType("uniqueidentifier");
@@ -459,13 +451,13 @@ namespace BeatStore_SoftUni.Migrations
                     b.HasOne("BeatStore_SoftUni.Data.Models.Beat", "Beat")
                         .WithMany("BeatGenres")
                         .HasForeignKey("BeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BeatStore_SoftUni.Data.Models.Genre", "Genre")
                         .WithMany("BeatGenres")
                         .HasForeignKey("GenreId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Beat");
@@ -478,13 +470,13 @@ namespace BeatStore_SoftUni.Migrations
                     b.HasOne("BeatStore_SoftUni.Data.Models.Beat", "Beat")
                         .WithMany("BeatPlaylists")
                         .HasForeignKey("BeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BeatStore_SoftUni.Data.Models.Playlist", "Playlist")
                         .WithMany("BeatPlaylists")
                         .HasForeignKey("PlaylistId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Beat");
