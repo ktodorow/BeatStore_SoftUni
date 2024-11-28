@@ -2,6 +2,7 @@
 using BeatStore_SoftUni.Data.Repository.Interfaces;
 using BeatStore_SoftUni.Services.Data.Interfaces;
 using BeatStore_SoftUni.ViewModels.BeatDtos;
+using Microsoft.EntityFrameworkCore;
 
 namespace BeatStore_SoftUni.Services.Data
 {
@@ -74,5 +75,34 @@ namespace BeatStore_SoftUni.Services.Data
             // Return all available genres
             return await this.genreRepository.GetAllAsync();
         }
+
+        public async Task<BeatDetailsDTO?> GetBeatDetailsAsync(Guid id, Guid userId)
+        {
+            // Query the beat with necessary related data
+            var beat = await this.beatRepository.GetAllAttached()
+                .Include(b => b.Artist)
+                .Include(b => b.BeatPlaylists)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
+            if (beat == null)
+            {
+                return null; // Beat not found
+            }
+
+            // Map the entity to BeatDetailsDTO
+            return new BeatDetailsDTO
+            {
+                Id = beat.Id,
+                Title = beat.Title,
+                CoverArtUrl = beat.CoverArtUrl!,
+                AudioFileUrl = beat.AudioFileUrl!,
+                Price = beat.Price,
+                UploadedBy = beat.Artist.UserName,
+                DateUploaded = beat.DateUploaded,
+                PlaylistsCount = beat.BeatPlaylists.Count,
+                IsOwner = beat.ArtistId == userId // Check ownership
+            };
+        }
+
     }
 }

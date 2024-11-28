@@ -53,5 +53,30 @@ namespace BeatStore_SoftUni.Controllers
             await this.beatService.CreateBeatAsync(model, artistId);
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(string id)
+        {
+            // Validate GUID
+            if (!Guid.TryParse(id, out var beatId))
+            {
+                return NotFound(); // Invalid ID
+            }
+
+            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized(); // User not logged in
+            }
+
+            var beatDetails = await this.beatService.GetBeatDetailsAsync(beatId, userId);
+            if (beatDetails == null)
+            {
+                return NotFound(); // Beat not found
+            }
+
+            return View(beatDetails);
+        }
+
     }
 }

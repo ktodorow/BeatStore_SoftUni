@@ -1,0 +1,87 @@
+﻿/* Updated Image Styling */
+.container img {
+    width: 300px; /* Fixed width */
+    height: 300px; /* Fixed height to ensure square */
+    object-fit: cover; /* Ensures the image fits inside the square without distortion */
+    border-radius: 8px; /* Smooth corners */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Subtle shadow for depth */
+    transition: transform 0.3s ease; /* Smooth zoom effect */
+}
+
+.container img:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+}
+
+/* Container Styling */
+.container {
+    display: flex;
+    justify-content: flex-start; /* Align the image and content to the left */
+    align-items: flex-start; /* Align content vertically to the top */
+    gap: 2rem; /* Spacing between the image and details */
+    padding: 1.5rem; /* Padding around the container */
+    background: transparent; /* Remove the dark background */
+}
+
+/* Heading */
+h1 {
+    font-size: 2rem;
+    color: #FFFFFF; /* Spotify green */
+    margin-bottom: 1rem;
+}
+
+/* Button Styling */
+.btn {
+    margin-top: 10px;
+    font-size: 1rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.btn:hover {
+    color: white;
+    transform: scale(1.05); /* Subtle zoom effect */
+}
+
+/* Details Section Styling */
+.details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Align details to the left */
+}
+
+.details .info {
+    color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background: #1e2836; /* Subtle dark background for contrast */
+    max-width: 400px; /* Fixed width for the details card */
+    width: 100%; /* Ensure responsiveness */
+}
+
+.details .info ul {
+    list-style: none;
+    padding: 0;
+}
+
+.details .info ul li {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.details .info ul li i {
+    margin-right: 0.5rem;
+    color: #1db954; /* Spotify green icons */
+}
+
+/* Remove unwanted background from other elements */
+.details .info,
+.container {
+    background: none; /* Ensure no extra background */
+    box-shadow: none; /* Remove shadows from the container */
+}

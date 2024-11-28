@@ -8,5 +8,6 @@ namespace BeatStore_SoftUni.Services.Data.Interfaces
         Task CreateBeatAsync(CreateBeatDTO model, Guid artistId);
         Task<IEnumerable<BeatIndexDTO>> GetAllBeatsAsync();
         Task<IEnumerable<Genre>> GetGenresAsync();
+        Task<BeatDetailsDTO?> GetBeatDetailsAsync(Guid id, Guid userId);
     }
 }

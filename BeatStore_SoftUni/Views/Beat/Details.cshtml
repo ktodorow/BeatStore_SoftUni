@@ -1,0 +1,57 @@
+﻿@model BeatStore_SoftUni.ViewModels.BeatDtos.BeatDetailsDTO
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/beat-details.css" asp-append-version="true">
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Cover Art -->
+        <div class="col-md-6">
+            <img src="@Model.CoverArtUrl" class="img-fluid" alt="Cover Art" />
+        </div>
+
+        <!-- Details Section -->
+        <div class="col-md-6">
+            <div class="details-section">
+                <h1>@Model.Title</h1>
+                <div class="info-item">
+                    <i class="fa fa-calendar"></i>
+                    <p><strong>Uploaded On:</strong> @Model.DateUploaded.ToString("MMMM dd, yyyy")</p>
+                </div>
+                <div class="info-item">
+                    <i class="fa fa-user"></i>
+                    <p><strong>Uploaded By:</strong> @Model.UploadedBy</p>
+                </div>
+                <div class="info-item">
+                    <i class="fa fa-dollar-sign"></i>
+                    <p><strong>Price:</strong> $@Model.Price</p>
+                </div>
+                <div class="info-item">
+                    <i class="fa fa-list"></i>
+                    <p><strong>In Playlists:</strong> @Model.PlaylistsCount</p>
+                </div>
+
+                <!-- Buttons for Owner -->
+                @if (Model.IsOwner)
+                {
+                    <a href="@Url.Action("Edit", "Beat", new { id = Model.Id })" class="btn btn-warning">
+                        <i class="fa fa-edit"></i> Edit
+                    </a>
+                    <a href="@Url.Action("Delete", "Beat", new { id = Model.Id })" class="btn btn-danger">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
+                }
+                else
+                {
+                    <!-- Buy Button -->
+                    <a href="@Url.Action("Buy", "Beat", new { id = Model.Id })" class="btn btn-success">
+                        <i class="fa fa-shopping-cart"></i> Buy
+                    </a>
+                }
+            </div>
+        </div>
+    </div>
+</div>
