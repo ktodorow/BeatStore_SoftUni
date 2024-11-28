@@ -33,6 +33,8 @@ public class Beat
     [Required]
     public DateTime DateUploaded { get; set; }
 
+    public bool IsActive { get; set; } = true;
+
     // Navigation properties
     public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
     public virtual ICollection<Rating> Ratings { get; set; } = new HashSet<Rating>();

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeatStore_SoftUni.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241128002441_SeedGenres")]
-    partial class SeedGenres
+    [Migration("20241128202141_SeedGenreAndIsActiveBeat")]
+    partial class SeedGenreAndIsActiveBeat
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,6 +123,9 @@ namespace BeatStore_SoftUni.Data.Migrations
                     b.Property<Guid?>("GenreId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
@@ -221,25 +224,25 @@ namespace BeatStore_SoftUni.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("8efe3ca8-203a-4c33-b311-5063c017a30a"),
+                            Id = new Guid("7a2e7756-263a-43ae-b005-cbb00cb28a82"),
                             Description = "A genre characterized by rhythmic speech and beats.",
                             Name = "Hip Hop"
                         },
                         new
                         {
-                            Id = new Guid("04162ce0-bc10-433e-b84c-bcf66343ea0d"),
+                            Id = new Guid("c7a077a6-7810-4f24-b207-3a8a454d67aa"),
                             Description = "A genre known for swing and blue notes, and improvisation.",
                             Name = "Jazz"
                         },
                         new
                         {
-                            Id = new Guid("90d2a529-5650-4d3c-aeee-384c4c17e17a"),
+                            Id = new Guid("d86c5ac2-225b-4785-bf37-384006842893"),
                             Description = "A genre focused on electronic instruments and sound manipulation.",
                             Name = "Electronic"
                         },
                         new
                         {
-                            Id = new Guid("3002c4e9-875a-4ed6-8d1c-1d51e8a4721d"),
+                            Id = new Guid("3a0de8f5-7b99-40cc-9690-39941f0efbdf"),
                             Description = "A genre with heavy use of guitars and a strong rhythm.",
                             Name = "Rock"
                         });

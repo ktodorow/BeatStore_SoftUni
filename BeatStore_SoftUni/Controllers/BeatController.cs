@@ -115,5 +115,20 @@ namespace BeatStore_SoftUni.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+
+            var success = await this.beatService.SoftDeleteBeatAsync(id, userId);
+
+            if (!success)
+            {
+                return Unauthorized();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

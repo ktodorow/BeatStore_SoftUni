@@ -11,6 +11,7 @@ namespace BeatStore_SoftUni.Services.Data.Interfaces
         Task<BeatDetailsDTO?> GetBeatDetailsAsync(Guid id, Guid userId);
         Task<EditBeatDTO?> GetBeatForEditAsync(Guid beatId, Guid userId);
         Task<bool> EditBeatAsync(EditBeatDTO model, Guid userId);
+        Task<bool> SoftDeleteBeatAsync(Guid beatId, Guid userId);
 
     }
 }

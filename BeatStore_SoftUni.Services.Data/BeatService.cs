@@ -25,6 +25,7 @@ namespace BeatStore_SoftUni.Services.Data
         {
             var beats = await Task.Run(() => this.beatRepository
                 .GetAllAttached()
+                .Where(b => b.IsActive)
                 .Select(b => new BeatIndexDTO
                 {
                     Id = b.Id,
@@ -33,7 +34,8 @@ namespace BeatStore_SoftUni.Services.Data
                     CoverArtUrl = b.CoverArtUrl!,
                     Price = b.Price,
                     DateUploaded = b.DateUploaded,
-                    AudioFileUrl = b.AudioFileUrl // Populate the new property
+                    AudioFileUrl = b.AudioFileUrl,
+                    IsActive = b.IsActive
                 })
                 .ToList());
 
@@ -168,6 +170,19 @@ namespace BeatStore_SoftUni.Services.Data
                     beat.BeatGenres.Remove(beatGenreToRemove);
                 }
             }
+
+            return await this.beatRepository.UpdateAsync(beat);
+        }
+        public async Task<bool> SoftDeleteBeatAsync(Guid beatId, Guid userId)
+        {
+            var beat = await this.beatRepository.FirstOrDefaultAsync(b => b.Id == beatId && b.ArtistId == userId);
+
+            if (beat == null)
+            {
+                return false;
+            }
+
+            beat.IsActive = false;
 
             return await this.beatRepository.UpdateAsync(beat);
         }
