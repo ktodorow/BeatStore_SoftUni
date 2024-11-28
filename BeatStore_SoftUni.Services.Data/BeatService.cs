@@ -20,10 +20,8 @@ namespace BeatStore_SoftUni.Services.Data
             this.beatGenreRepository = beatGenreRepository;
             this.genreRepository = genreRepository;
         }
-
         public async Task<IEnumerable<BeatIndexDTO>> GetAllBeatsAsync()
         {
-            // Map all beats into BeatIndexDTO objects
             var beats = await Task.Run(() => this.beatRepository
                 .GetAllAttached()
                 .Select(b => new BeatIndexDTO
@@ -33,7 +31,8 @@ namespace BeatStore_SoftUni.Services.Data
                     Genre = string.Join(", ", b.BeatGenres.Select(bg => bg.Genre.Name)),
                     CoverArtUrl = b.CoverArtUrl!,
                     Price = b.Price,
-                    DateUploaded = b.DateUploaded
+                    DateUploaded = b.DateUploaded,
+                    AudioFileUrl = b.AudioFileUrl // Populate the new property
                 })
                 .ToList());
 

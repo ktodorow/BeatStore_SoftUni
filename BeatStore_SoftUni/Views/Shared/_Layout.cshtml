@@ -4,6 +4,8 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - BeatStore</title>
+
+    <!-- CSS Libraries -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/BeatStore.styles.css" asp-append-version="true" />
@@ -25,13 +27,11 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Beats" asp-action="Index">Beats</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Beat" asp-action="Index">Beats</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Beats" asp-action="Genres">Genres</a>
                         </li>
-                        <!-- Added Beats Index Link -->
-
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
@@ -51,9 +51,11 @@
         </footer>
     </div>
 
+    <!-- JS Libraries -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Custom Scripts -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

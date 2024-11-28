@@ -4,27 +4,44 @@
     <link rel="stylesheet" href="~/css/beat-library.css">
 }
 
+@section Scripts {
+    <script src="~/js/library.js" asp-append-version="true"></script>
+}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
 <h1 class="text-center mt-4 text-white">Library</h1>
 
 <div class="library-container">
-    @if (!Model.Any())
+    @foreach (var beat in Model)
     {
-        <p class="text-center text-white">No beats available. Start by creating one!</p>
-    }
-    else
-    {
-        @foreach (var beat in Model)
-        {
-            <div class="library-card">
+        <div class="library-card"
+             data-audio-url="@beat.AudioFileUrl"
+             data-title="@beat.Title"
+             data-cover="@beat.CoverArtUrl">
+            <div class="cover-wrapper">
                 <img src="@beat.CoverArtUrl" alt="Beat Cover Art">
-                <div class="card-body">
-                    <h5 class="card-title">@beat.Title</h5>
-                    <p class="card-text">
-                        <strong>Genre:</strong> @beat.Genre <br>
-                        <strong>Price:</strong> $@beat.Price
-                    </p>
+                <div class="play-button">
+                    <i class="fa fa-play"></i>
                 </div>
             </div>
-        }
+            <div class="card-body">
+                <h5 class="card-title">@beat.Title</h5>
+                <p class="card-text">
+                    <strong>Genre:</strong> @beat.Genre <br>
+                    <strong>Price:</strong> $@beat.Price
+                </p>
+            </div>
+        </div>
     }
 </div>
+
+<footer id="media-player" class="media-player hidden">
+    <div class="player-details">
+        <span id="current-track-title">No track playing</span>
+    </div>
+    <audio id="audio-player" controls>
+        <source id="audio-source" src="" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+</footer>

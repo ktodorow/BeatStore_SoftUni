@@ -8,5 +8,6 @@
         public string CoverArtUrl { get; set; } = null!;
         public decimal Price { get; set; }
         public DateTime DateUploaded { get; set; }
+        public string AudioFileUrl { get; set; } = null!; // New property for the audio file
     }
 }
