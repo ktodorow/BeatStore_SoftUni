@@ -37,11 +37,27 @@
 </div>
 
 <footer id="media-player" class="media-player hidden">
-    <div class="player-details">
-        <span id="current-track-title">No track playing</span>
+    <div class="player-left">
+        <img id="track-cover" src="" alt="Track Cover" class="track-cover">
+        <div class="track-info">
+            <span id="track-title" class="track-title">No track playing</span>
+            <span id="track-artist" class="track-artist">Unknown Artist</span>
+        </div>
     </div>
-    <audio id="audio-player" controls>
-        <source id="audio-source" src="" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
+    <div class="player-center">
+        <div class="player-controls">
+            <button id="prev-button" class="control-button"><i class="fa fa-step-backward"></i></button>
+            <button id="play-pause-button" class="control-button"><i class="fa fa-play"></i></button>
+            <button id="next-button" class="control-button"><i class="fa fa-step-forward"></i></button>
+        </div>
+        <div class="progress-container">
+            <span id="current-time">0:00</span>
+            <input id="progress-bar" type="range" min="0" max="100" value="0">
+            <span id="track-duration">0:00</span>
+        </div>
+    </div>
+    <div class="player-right">
+        <button id="volume-button" class="control-button"><i class="fa fa-volume-up"></i></button>
+        <input id="volume-slider" type="range" min="0" max="1" step="0.1" value="1">
+    </div>
 </footer>

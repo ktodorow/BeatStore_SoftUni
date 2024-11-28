@@ -95,53 +95,107 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #181818; /* Slightly lighter background for contrast */
+    background-color: #121212; /* Dark Spotify-style background */
     color: white;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Space between title and controls */
+    justify-content: space-between;
     padding: 10px 20px;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000; /* Ensure it stays on top */
+    z-index: 1000; /* Ensure it's on top */
     font-family: Arial, sans-serif;
 }
 
 .media-player.hidden {
-    display: none;
+    display: none; /* Hide when not active */
 }
 
-.media-player .player-details {
-    flex: 1;
-    text-align: left;
-    font-size: 0.9rem;
-    font-weight: bold;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Ellipsis for long titles */
-}
-
-.media-player audio {
-    flex: 0;
-    width: 300px;
-    margin-left: 20px;
-}
-
-.media-player .audio-controls {
+.player-left {
     display: flex;
     align-items: center;
-    gap: 10px;
-    color: #fff;
 }
 
-.media-player .audio-controls button {
+.track-cover {
+    width: 50px;
+    height: 50px;
+    border-radius: 4px;
+    margin-right: 10px;
+    object-fit: cover;
+}
+
+.track-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.track-title {
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.track-artist {
+    font-size: 0.8rem;
+    color: #bbb;
+}
+
+.player-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.player-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.control-button {
     background: none;
     border: none;
-    color: #fff;
+    color: white;
     font-size: 1.2rem;
     cursor: pointer;
     transition: color 0.3s;
 }
 
-.media-player .audio-controls button:hover {
-    color: #1db954; /* Spotify green for hover effect */
+.control-button:hover {
+    color: #1db954; /* Spotify green hover */
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+#progress-bar {
+    flex: 1;
+    appearance: none;
+    background: #444;
+    height: 5px;
+    border-radius: 5px;
+    outline: none;
+    cursor: pointer;
+}
+
+#progress-bar::-webkit-slider-thumb {
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: #1db954; /* Spotify green */
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.player-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#volume-slider {
+    width: 100px;
 }
