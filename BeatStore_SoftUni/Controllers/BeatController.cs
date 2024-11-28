@@ -57,22 +57,25 @@ namespace BeatStore_SoftUni.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
-            // Validate GUID
             if (!Guid.TryParse(id, out var beatId))
             {
-                return NotFound(); // Invalid ID
+                return NotFound();
             }
 
             var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
             {
-                return Unauthorized(); // User not logged in
+                return Unauthorized(); 
             }
 
             var beatDetails = await this.beatService.GetBeatDetailsAsync(beatId, userId);
-            if (beatDetails == null)
+            if (beatDetails == null || !beatDetails.IsActive)
             {
-                return NotFound(); // Beat not found
+                if (beatDetails == null || !beatDetails.IsActive)
+                {
+                    TempData["ErrorMessage"] = "This beat is no longer available.";
+                    return RedirectToAction("Index", "Beat");
+                }
             }
 
             return View(beatDetails);
@@ -85,9 +88,10 @@ namespace BeatStore_SoftUni.Controllers
 
             var model = await this.beatService.GetBeatForEditAsync(id, userId);
 
-            if (model == null)
+            if (model == null || !model.IsActive)
             {
-                return Unauthorized(); // Beat not found or not owned by the user
+                TempData["ErrorMessage"] = "This beat is no longer available.";
+                return RedirectToAction("Index", "Beat");
             }
 
             ViewBag.Genres = await this.beatService.GetGenresAsync();

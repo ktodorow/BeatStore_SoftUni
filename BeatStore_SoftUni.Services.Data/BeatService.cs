@@ -44,7 +44,6 @@ namespace BeatStore_SoftUni.Services.Data
 
         public async Task CreateBeatAsync(CreateBeatDTO model, Guid artistId)
         {
-            // Create the beat entity
             var beat = new Beat
             {
                 Id = Guid.NewGuid(),
@@ -56,10 +55,8 @@ namespace BeatStore_SoftUni.Services.Data
                 DateUploaded = DateTime.UtcNow,
             };
 
-            // Save the beat to the database
             await this.beatRepository.AddAsync(beat);
 
-            // Add the associated genres
             foreach (var genreId in model.GenreIds)
             {
                 var beatGenre = new BeatGenre
@@ -74,24 +71,21 @@ namespace BeatStore_SoftUni.Services.Data
 
         public async Task<IEnumerable<Genre>> GetGenresAsync()
         {
-            // Return all available genres
             return await this.genreRepository.GetAllAsync();
         }
 
         public async Task<BeatDetailsDTO?> GetBeatDetailsAsync(Guid id, Guid userId)
         {
-            // Query the beat with necessary related data
             var beat = await this.beatRepository.GetAllAttached()
                 .Include(b => b.Artist)
                 .Include(b => b.BeatPlaylists)
-                .FirstOrDefaultAsync(b => b.Id == id);
+                .FirstOrDefaultAsync(b => b.Id == id && b.IsActive);
 
             if (beat == null)
             {
-                return null; // Beat not found
+                return null;
             }
 
-            // Map the entity to BeatDetailsDTO
             return new BeatDetailsDTO
             {
                 Id = beat.Id,
@@ -102,7 +96,8 @@ namespace BeatStore_SoftUni.Services.Data
                 UploadedBy = beat.Artist.UserName,
                 DateUploaded = beat.DateUploaded,
                 PlaylistsCount = beat.BeatPlaylists.Count,
-                IsOwner = beat.ArtistId == userId // Check ownership
+                IsOwner = beat.ArtistId == userId,
+                IsActive = beat.IsActive
             };
         }
 
@@ -111,7 +106,7 @@ namespace BeatStore_SoftUni.Services.Data
             var beat = await this.beatRepository
                 .GetAllAttached()
                 .Include(b => b.BeatGenres)
-                .FirstOrDefaultAsync(b => b.Id == beatId && b.ArtistId == userId);
+                .FirstOrDefaultAsync(b => b.Id == beatId && b.ArtistId == userId && b.IsActive);
 
             if (beat == null)
             {
@@ -125,7 +120,8 @@ namespace BeatStore_SoftUni.Services.Data
                 Price = beat.Price,
                 AudioFileUrl = beat.AudioFileUrl,
                 CoverArtUrl = beat.CoverArtUrl,
-                GenreIds = beat.BeatGenres.Select(bg => bg.GenreId).ToList()
+                GenreIds = beat.BeatGenres.Select(bg => bg.GenreId).ToList(),
+                IsActive = beat.IsActive
             };
         }
 
@@ -138,19 +134,16 @@ namespace BeatStore_SoftUni.Services.Data
 
             if (beat == null)
             {
-                return false; // Beat not found or user is not the owner
+                return false; 
             }
 
-            // Update beat properties
             beat.Title = model.Title;
             beat.Price = model.Price;
             beat.AudioFileUrl = model.AudioFileUrl;
             beat.CoverArtUrl = model.CoverArtUrl;
 
-            // Update genres: Only add new ones or remove unused ones
             var currentGenreIds = beat.BeatGenres.Select(bg => bg.GenreId).ToHashSet();
 
-            // Add new genres
             foreach (var genreId in model.GenreIds.Except(currentGenreIds))
             {
                 var beatGenre = new BeatGenre
@@ -161,7 +154,6 @@ namespace BeatStore_SoftUni.Services.Data
                 await this.beatGenreRepository.AddAsync(beatGenre);
             }
 
-            // Remove unused genres
             foreach (var genreId in currentGenreIds.Except(model.GenreIds))
             {
                 var beatGenreToRemove = beat.BeatGenres.FirstOrDefault(bg => bg.GenreId == genreId);

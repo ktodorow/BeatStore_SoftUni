@@ -11,5 +11,6 @@
         public DateTime DateUploaded { get; set; }
         public int PlaylistsCount { get; set; }
         public bool IsOwner { get; set; } 
+        public bool IsActive { get; set; }
     }
 }

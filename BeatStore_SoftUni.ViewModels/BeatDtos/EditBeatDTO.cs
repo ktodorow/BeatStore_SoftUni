@@ -25,7 +25,9 @@ namespace BeatStore_SoftUni.ViewModels.BeatDtos
         public string CoverArtUrl { get; set; } = null!;
 
         [Required]
-        public List<Guid> GenreIds { get; set; } = new List<Guid>(); 
+        public List<Guid> GenreIds { get; set; } = new List<Guid>();
+
+        public bool IsActive { get; set; }
     }
 
 }
