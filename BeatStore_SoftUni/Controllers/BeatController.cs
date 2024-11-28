@@ -1,0 +1,57 @@
+﻿using BeatStore_SoftUni.Services.Data.Interfaces;
+using BeatStore_SoftUni.ViewModels.BeatDtos;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
+namespace BeatStore_SoftUni.Controllers
+{
+    [Authorize]
+    public class BeatController : Controller
+    {
+        private readonly IBeatService beatService;
+
+        public BeatController(IBeatService beatService)
+        {
+            this.beatService = beatService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var beats = await this.beatService.GetAllBeatsAsync();
+            return View(beats);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            var genres = await this.beatService.GetGenresAsync();
+            ViewBag.Genres = genres;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(CreateBeatDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                var genres = await this.beatService.GetGenresAsync();
+                ViewBag.Genres = genres;
+                return View(model);
+            }
+
+            var artistIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(artistIdClaim) || !Guid.TryParse(artistIdClaim, out var artistId))
+            {
+                ModelState.AddModelError("", "Unable to retrieve artist information. Please log in again.");
+                var genres = await this.beatService.GetGenresAsync();
+                ViewBag.Genres = genres;
+                return View(model);
+            }
+
+            await this.beatService.CreateBeatAsync(model, artistId);
+            return RedirectToAction(nameof(Index));
+        }
+    }
+}

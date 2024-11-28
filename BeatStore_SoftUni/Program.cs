@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 using BeatStore_SoftUni.Data.Models;
+using BeatStore_SoftUni.Data.Repository.Interfaces;
+using BeatStore_SoftUni.Data.Repository;
+using BeatStore_SoftUni.Services.Data;
+using BeatStore_SoftUni.Services.Data.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +25,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders()
     .AddDefaultUI();
+
+builder.Services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
+builder.Services.AddScoped<IBeatService, BeatService>();
+
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();

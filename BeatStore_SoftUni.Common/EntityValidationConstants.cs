@@ -8,8 +8,8 @@ public static class EntityValidationConstants
     public const int BeatTitleMinLength = 3;
     public const int BeatTitleMaxLength = 100;
     public const int BeatGenreMaxLength = 50;
-    public const string BeatPriceMinValue = "0.99";
-    public const string BeatPriceMaxValue = "999.99";
+    public const decimal BeatPriceMinValue = 0.99m;
+    public const decimal BeatPriceMaxValue = 999.99m;
     public const int BeatDurationMinValue = 1;
     public const int BeatDurationMaxValue = 300; // Seconds
     public const int BeatAudioFileUrlMaxLength = 2048;

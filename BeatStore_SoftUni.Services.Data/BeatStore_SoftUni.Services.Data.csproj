@@ -6,4 +6,11 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BeatStore_SoftUni.Common\BeatStore_SoftUni.Common.csproj" />
+    <ProjectReference Include="..\BeatStore_SoftUni.Data.Models\BeatStore_SoftUni.Data.Models.csproj" />
+    <ProjectReference Include="..\BeatStore_SoftUni.Data\BeatStore_SoftUni.Data.csproj" />
+    <ProjectReference Include="..\BeatStore_SoftUni.ViewModels\BeatStore_SoftUni.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>
