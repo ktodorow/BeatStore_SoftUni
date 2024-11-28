@@ -78,5 +78,42 @@ namespace BeatStore_SoftUni.Controllers
             return View(beatDetails);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+
+            var model = await this.beatService.GetBeatForEditAsync(id, userId);
+
+            if (model == null)
+            {
+                return Unauthorized(); // Beat not found or not owned by the user
+            }
+
+            ViewBag.Genres = await this.beatService.GetGenresAsync();
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditBeatDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Genres = await this.beatService.GetGenresAsync();
+                return View(model);
+            }
+
+            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+
+            var success = await this.beatService.EditBeatAsync(model, userId);
+
+            if (!success)
+            {
+                return Unauthorized();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

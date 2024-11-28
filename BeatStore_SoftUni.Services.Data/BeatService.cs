@@ -104,5 +104,73 @@ namespace BeatStore_SoftUni.Services.Data
             };
         }
 
+        public async Task<EditBeatDTO?> GetBeatForEditAsync(Guid beatId, Guid userId)
+        {
+            var beat = await this.beatRepository
+                .GetAllAttached()
+                .Include(b => b.BeatGenres)
+                .FirstOrDefaultAsync(b => b.Id == beatId && b.ArtistId == userId);
+
+            if (beat == null)
+            {
+                return null; 
+            }
+
+            return new EditBeatDTO
+            {
+                Id = beat.Id,
+                Title = beat.Title,
+                Price = beat.Price,
+                AudioFileUrl = beat.AudioFileUrl,
+                CoverArtUrl = beat.CoverArtUrl,
+                GenreIds = beat.BeatGenres.Select(bg => bg.GenreId).ToList()
+            };
+        }
+
+        public async Task<bool> EditBeatAsync(EditBeatDTO model, Guid userId)
+        {
+            var beat = await this.beatRepository
+                .GetAllAttached()
+                .Include(b => b.BeatGenres)
+                .FirstOrDefaultAsync(b => b.Id == model.Id && b.ArtistId == userId);
+
+            if (beat == null)
+            {
+                return false; // Beat not found or user is not the owner
+            }
+
+            // Update beat properties
+            beat.Title = model.Title;
+            beat.Price = model.Price;
+            beat.AudioFileUrl = model.AudioFileUrl;
+            beat.CoverArtUrl = model.CoverArtUrl;
+
+            // Update genres: Only add new ones or remove unused ones
+            var currentGenreIds = beat.BeatGenres.Select(bg => bg.GenreId).ToHashSet();
+
+            // Add new genres
+            foreach (var genreId in model.GenreIds.Except(currentGenreIds))
+            {
+                var beatGenre = new BeatGenre
+                {
+                    BeatId = beat.Id,
+                    GenreId = genreId
+                };
+                await this.beatGenreRepository.AddAsync(beatGenre);
+            }
+
+            // Remove unused genres
+            foreach (var genreId in currentGenreIds.Except(model.GenreIds))
+            {
+                var beatGenreToRemove = beat.BeatGenres.FirstOrDefault(bg => bg.GenreId == genreId);
+                if (beatGenreToRemove != null)
+                {
+                    beat.BeatGenres.Remove(beatGenreToRemove);
+                }
+            }
+
+            return await this.beatRepository.UpdateAsync(beat);
+        }
+
     }
 }
