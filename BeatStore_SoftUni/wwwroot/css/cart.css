@@ -1,0 +1,29 @@
+.cart-container {
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.cart-item-image {
+    width: 100px;
+    height: 100px;
+    margin-right: 20px;
+    border-radius: 5px;
+}
+
+.cart-item-details h4 {
+    margin: 0 0 5px;
+}
+
+.cart-summary {
+    text-align: right;
+    margin-top: 20px;
+}

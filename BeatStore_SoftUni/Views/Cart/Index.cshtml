@@ -1,0 +1,37 @@
+﻿@model BeatStore_SoftUni.ViewModels.CartDtos.CartDTO
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/cart.css" />
+}
+
+<h1 class="text-center mt-4">Your Cart</h1>
+
+@if (Model.Items.Any())
+{
+    <div class="cart-container">
+        @foreach (var item in Model.Items)
+        {
+            <div class="cart-item">
+                <img src="@item.CoverArtUrl" alt="Cover Art" class="cart-item-image" />
+                <div class="cart-item-details">
+                    <h4>@item.Title</h4>
+                    <p><strong>Price:</strong> $@item.Price</p>
+                </div>
+                <form asp-action="RemoveFromCart" asp-controller="Cart" method="post">
+                    <input type="hidden" name="beatId" value="@item.BeatId" />
+                    <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                </form>
+            </div>
+        }
+        <div class="cart-summary">
+            <p><strong>Total:</strong> $@Model.TotalPrice</p>
+            <form asp-action="Checkout" asp-controller="Cart" method="post">
+                <button type="submit" class="btn btn-primary">Place Order</button>
+            </form>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-center">Your cart is empty.</p>
+}

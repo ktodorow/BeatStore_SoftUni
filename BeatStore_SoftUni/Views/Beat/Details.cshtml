@@ -39,25 +39,24 @@
                     <p><strong>In Playlists:</strong> @Model.PlaylistsCount</p>
                 </div>
 
-                <!-- Buttons for Owner -->
                 @if (Model.IsOwner)
                 {
-                    <a href="@Url.Action("Edit", "Beat", new { id = Model.Id })" class="btn btn-warning">
-                        <i class="fa fa-edit"></i> Edit
-                    </a>
+                    <a href="@Url.Action("Edit", "Beat", new { id = Model.Id })" class="btn btn-warning">Edit</a>
                     <a href="javascript:void(0)"
                        class="btn btn-danger delete-button"
                        onclick="showDeleteConfirmation('@Url.Action("Delete", "Beat")', '@Model.Id');">
-                        <i class="fa fa-trash"></i> Delete
+                        Delete
                     </a>
                 }
                 else
                 {
-                    <!-- Buy Button -->
-                    <a href="@Url.Action("Buy", "Beat", new { id = Model.Id })" class="btn btn-success">
-                        <i class="fa fa-shopping-cart"></i> Buy
-                    </a>
+                    <a href="@Url.Action("Buy", "Purchase", new { id = Model.Id })" class="btn btn-success">Buy</a>
+                    <form asp-action="AddToCart" asp-controller="Cart" method="post" class="d-inline">
+                        <input type="hidden" name="beatId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
                 }
+
             </div>
         </div>
     </div>

@@ -1,0 +1,28 @@
+﻿@model BeatStore_SoftUni.ViewModels.PurchaseDtos.PurchaseDTO
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/buy.css" />
+}
+
+<h1 class="text-center mt-4">Purchase Beat</h1>
+
+<div class="purchase-container">
+    <img src="@Model.CoverArtUrl" alt="Cover Art" class="purchase-image" />
+    <div class="purchase-details">
+        <h4>@Model.Title</h4>
+        <p><strong>Price:</strong> $@Model.Price</p>
+    </div>
+</div>
+
+<form asp-action="PlaceOrder" asp-controller="Purchase" method="post" id="purchase-form">
+    <input type="hidden" name="beatId" value="@Model.Id" />
+    <button type="submit" class="btn btn-success">Purchase</button>
+</form>
+
+<div class="loading-overlay" id="loading-overlay">
+    Processing your purchase, please wait...
+</div>
+
+@section Scripts {
+    <script src="~/js/buy.js" asp-append-version="true"></script>
+}

@@ -4,6 +4,7 @@ using BeatStore_SoftUni.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BeatStore_SoftUni.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241129212359_AddUserBalance")]
+    partial class AddUserBalance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -224,25 +227,25 @@ namespace BeatStore_SoftUni.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("7ebda061-483f-4590-bc8a-1d117f3f2750"),
+                            Id = new Guid("1bb06c3b-b7c2-4b74-85f7-66e587e152f6"),
                             Description = "A genre characterized by rhythmic speech and beats.",
                             Name = "Hip Hop"
                         },
                         new
                         {
-                            Id = new Guid("ce5076d1-df63-4d50-a17e-9174b70a3542"),
+                            Id = new Guid("f598dd8f-2b40-47fd-9731-e03b28b479a1"),
                             Description = "A genre known for swing and blue notes, and improvisation.",
                             Name = "Jazz"
                         },
                         new
                         {
-                            Id = new Guid("cf056f41-a137-4684-8197-f1b7fc3a605f"),
+                            Id = new Guid("457a3998-1a92-434d-8b14-af5e6e3fb2d3"),
                             Description = "A genre focused on electronic instruments and sound manipulation.",
                             Name = "Electronic"
                         },
                         new
                         {
-                            Id = new Guid("f0d7057d-f87e-4ce3-8872-ef6286d15db6"),
+                            Id = new Guid("ab029f03-5a2a-453b-b4fa-6391acb8f5ba"),
                             Description = "A genre with heavy use of guitars and a strong rhythm.",
                             Name = "Rock"
                         });
@@ -330,44 +333,6 @@ namespace BeatStore_SoftUni.Data.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Ratings");
-                });
-
-            modelBuilder.Entity("Cart", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Carts", (string)null);
-                });
-
-            modelBuilder.Entity("CartItem", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BeatId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CartId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BeatId");
-
-                    b.HasIndex("CartId");
-
-                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
@@ -622,36 +587,6 @@ namespace BeatStore_SoftUni.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Cart", b =>
-                {
-                    b.HasOne("BeatStore_SoftUni.Data.Models.ApplicationUser", "User")
-                        .WithOne()
-                        .HasForeignKey("Cart", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("CartItem", b =>
-                {
-                    b.HasOne("BeatStore_SoftUni.Data.Models.Beat", "Beat")
-                        .WithMany()
-                        .HasForeignKey("BeatId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Cart", "Cart")
-                        .WithMany("CartItems")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Beat");
-
-                    b.Navigation("Cart");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -726,11 +661,6 @@ namespace BeatStore_SoftUni.Data.Migrations
             modelBuilder.Entity("BeatStore_SoftUni.Data.Models.Playlist", b =>
                 {
                     b.Navigation("BeatPlaylists");
-                });
-
-            modelBuilder.Entity("Cart", b =>
-                {
-                    b.Navigation("CartItems");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,0 +1,67 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* Ensure background matches the theme */
+}
+
+h1 {
+    text-align: center;
+    color: white;
+    margin-top: 20px;
+}
+
+.bought-beats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 1.5rem;
+    padding: 2rem;
+    margin: auto;
+    max-width: 1200px;
+    background-color: #121212; /* Matches the background */
+}
+
+.bought-beat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    color: white;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bought-beat-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.bought-beat-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-bottom: 2px solid #333;
+}
+
+.bought-beat-details {
+    padding: 10px;
+    text-align: center;
+}
+
+.bought-beat-details h4 {
+    margin: 5px 0;
+    font-size: 1.2rem;
+}
+
+.bought-beat-details p {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin: 5px 0;
+}
+
+.bought-beat-details p strong {
+    color: #fff;
+}

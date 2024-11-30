@@ -1,0 +1,28 @@
+﻿@model IEnumerable<BeatStore_SoftUni.ViewModels.PurchaseDtos.PurchaseDTO>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/bought-beats.css" asp-append-version="true">
+}
+
+<h1 class="text-center mt-4 text-white">Your Purchased Beats</h1>
+
+<div class="bought-beats-container">
+    @if (Model.Any())
+    {
+        @foreach (var beat in Model)
+        {
+            <div class="bought-beat-item">
+                <img src="@beat.CoverArtUrl" alt="Cover Art" class="bought-beat-image" />
+                <div class="bought-beat-details">
+                    <h4>@beat.Title</h4>
+                    <p><strong>Price:</strong> $@beat.Price</p>
+                    <p><strong>Purchased On:</strong> @beat.DatePurchased.ToString("MMMM dd, yyyy")</p>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p class="text-center text-white">You haven't purchased any beats yet.</p>
+    }
+</div>

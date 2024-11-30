@@ -8,6 +8,7 @@ namespace BeatStore_SoftUni.Data.Models;
 public class ApplicationUser : IdentityUser<Guid>
 {
     [MaxLength(ProfilePicturePathMaxLength)]
-    public string? ProfilePicture { get; set; } //TODO: Set Default Profile Picture
+    public string? ProfilePicture { get; set; } 
     public DateTime DateJoined { get; set; }
+    public decimal Balance { get; set; } = 100.00m;
 }

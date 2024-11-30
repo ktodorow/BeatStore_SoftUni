@@ -26,5 +26,7 @@ namespace BeatStore_SoftUni.Data
         public virtual DbSet<Purchase> Purchases { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
         public virtual DbSet<BeatGenre> BeatsGenres { get; set; }
+        public DbSet<Cart> Carts { get; set; } = null!;
+        public DbSet<CartItem> CartItems { get; set; } = null!;
     }
 }
