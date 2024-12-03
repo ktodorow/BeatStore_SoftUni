@@ -2,10 +2,8 @@
 using BeatStore_SoftUni.Data.Repository.Interfaces;
 using BeatStore_SoftUni.Services.Data.Interfaces;
 using BeatStore_SoftUni.ViewModels.PurchaseDtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace BeatStore_SoftUni.Services.Data
 {
@@ -27,7 +25,9 @@ namespace BeatStore_SoftUni.Services.Data
 
         public async Task<PurchaseDTO?> GetPurchaseDetailsAsync(Guid beatId, Guid userId)
         {
-            var beat = await beatRepository.GetByIdAsync(beatId);
+            var beat = await beatRepository.GetAllAttached()
+                .Where(b => b.Id == beatId && b.IsActive) // Ensure beat is active
+                .FirstOrDefaultAsync();
 
             if (beat == null) return null;
 
@@ -43,9 +43,11 @@ namespace BeatStore_SoftUni.Services.Data
         public async Task<bool> PlaceDirectOrderAsync(Guid beatId, Guid userId)
         {
             var user = await userRepository.GetByIdAsync(userId);
-            var beat = await beatRepository.GetByIdAsync(beatId);
+            var beat = await beatRepository.GetAllAttached()
+                .Where(b => b.Id == beatId && b.IsActive) // Ensure beat is active
+                .FirstOrDefaultAsync();
 
-            if (user.Balance < beat.Price) return false;
+            if (beat == null || user.Balance < beat.Price) return false;
 
             user.Balance -= beat.Price;
             await userRepository.UpdateAsync(user);

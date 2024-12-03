@@ -23,6 +23,7 @@ namespace BeatStore_SoftUni.Controllers
 
             if (purchaseDetails == null)
             {
+                TempData["ErrorMessage"] = "The beat you are trying to purchase is no longer available.";
                 return RedirectToAction("Index", "Beat");
             }
 
