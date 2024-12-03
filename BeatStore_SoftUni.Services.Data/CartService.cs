@@ -44,16 +44,22 @@ namespace BeatStore_SoftUni.Services.Data
 
             return new CartDTO
             {
-                TotalPrice = cart.CartItems.Sum(ci => ci.Beat.Price),
-                Items = cart.CartItems.Select(ci => new CartItemDTO
-                {
-                    BeatId = ci.Beat.Id,
-                    Title = ci.Beat.Title,
-                    Price = ci.Beat.Price,
-                    CoverArtUrl = ci.Beat.CoverArtUrl
-                }).ToList()
+                TotalPrice = cart.CartItems
+                    .Where(ci => ci.Beat.IsActive)
+                    .Sum(ci => ci.Beat.Price),
+                Items = cart.CartItems
+                    .Where(ci => ci.Beat.IsActive)
+                    .Select(ci => new CartItemDTO
+                    {
+                        BeatId = ci.Beat.Id,
+                        Title = ci.Beat.Title,
+                        Price = ci.Beat.Price,
+                        CoverArtUrl = ci.Beat.CoverArtUrl
+                    })
+                    .ToList()
             };
         }
+
 
         public async Task<bool> AddToCartAsync(Guid userId, Guid beatId)
         {
