@@ -33,7 +33,12 @@
 <div class="library-container">
     @foreach (var beat in Model.Where(b => b.IsActive))
     {
-        <div class="library-card" data-audio-url="@beat.AudioFileUrl" data-title="@beat.Title" data-cover="@beat.CoverArtUrl" data-artist="@beat.ArtistUsername">
+        <div class="library-card" 
+             data-audio-url="@beat.AudioFileUrl" 
+             data-title="@beat.Title" 
+             data-cover="@beat.CoverArtUrl" 
+             data-artist="@beat.ArtistUsername"
+             data-details-url="@Url.Action("Details", "Beat", new { id = beat.Id })">
             <div class="cover-wrapper">
                 <a href="@Url.Action("Details", "Beat", new { id = beat.Id })">
                     <img src="@beat.CoverArtUrl" alt="Beat Cover Art">
@@ -55,7 +60,9 @@
 
 <footer id="media-player" class="media-player hidden">
     <div class="player-left">
-        <img id="track-cover" src="" alt="Track Cover" class="track-cover">
+        <a id="cover-link" href="#" target="_blank"> <!-- Added anchor tag -->
+            <img id="track-cover" src="" alt="Track Cover" class="track-cover">
+        </a>
         <div class="track-info">
             <span id="track-title" class="track-title">No track playing</span>
             <span id="track-artist" class="track-artist">Unknown Artist</span>

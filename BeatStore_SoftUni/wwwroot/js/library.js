@@ -38,15 +38,16 @@
     });
 
     // Function to load a track
-    function loadTrack(url, title, cover, artist) {
+    function loadTrack(url, title, cover, artist, detailsUrl) {
         audioPlayer.src = url;
         audioPlayer.load();
         audioPlayer.play();
 
         // Update UI
         trackCover.src = cover;
+        trackCover.parentElement.href = detailsUrl; // Set the cover art link
         trackTitle.textContent = title;
-        trackArtist.textContent = artist; // Set artist dynamically
+        trackArtist.textContent = artist;
         mediaPlayer.classList.remove("hidden");
         playPauseButton.innerHTML = '<i class="fa fa-pause"></i>';
     }
@@ -57,10 +58,11 @@
         const audioUrl = card.dataset.audioUrl;
         const title = card.dataset.title;
         const cover = card.querySelector("img").src;
-        const artist = card.dataset.artist; // Fetch artist from data attribute
+        const artist = card.dataset.artist;
+        const detailsUrl = card.dataset.detailsUrl; // Fetch the Details URL from data attribute
 
         playButton.addEventListener("click", function () {
-            loadTrack(audioUrl, title, cover, artist);
+            loadTrack(audioUrl, title, cover, artist, detailsUrl);
         });
     });
 
