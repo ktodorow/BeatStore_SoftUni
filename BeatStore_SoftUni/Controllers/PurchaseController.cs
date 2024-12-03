@@ -38,12 +38,13 @@ namespace BeatStore_SoftUni.Controllers
             if (!success)
             {
                 TempData["ErrorMessage"] = "You do not have enough balance to complete the purchase.";
-                return RedirectToAction("Buy", new { id = beatId });
+                return RedirectToAction("Buy", new { id = beatId }); 
             }
 
             TempData["SuccessMessage"] = "Purchase completed successfully!";
             return RedirectToAction("BoughtBeats");
         }
+
 
         [HttpGet]
         public async Task<IActionResult> BoughtBeats()

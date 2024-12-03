@@ -4,6 +4,20 @@
     <link rel="stylesheet" href="~/css/cart.css" />
 }
 
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger" role="alert">
+        <i class="fa fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" role="alert">
+        <i class="fa fa-check-circle"></i> @TempData["SuccessMessage"]
+    </div>
+}
+
 <h1 class="text-center mt-4">Your Cart</h1>
 
 @if (Model.Items.Any())
@@ -35,3 +49,4 @@ else
 {
     <p class="text-center">Your cart is empty.</p>
 }
+

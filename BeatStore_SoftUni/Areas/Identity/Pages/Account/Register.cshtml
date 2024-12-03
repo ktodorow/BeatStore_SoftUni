@@ -13,7 +13,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
 
             <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control auth-input" autocomplete="username" aria-required="true" placeholder="Email" />
+                <input asp-for="Input.Username" class="form-control auth-input" placeholder="Username" />
+                <label asp-for="Input.Username">Username</label>
+                <span asp-validation-for="Input.Username" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control auth-input" placeholder="Email" />
                 <label asp-for="Input.Email">Email</label>
                 <span asp-validation-for="Input.Email" class="text-danger"></span>
             </div>
