@@ -33,7 +33,7 @@
 <div class="library-container">
     @foreach (var beat in Model.Where(b => b.IsActive))
     {
-        <div class="library-card" data-audio-url="@beat.AudioFileUrl" data-title="@beat.Title" data-cover="@beat.CoverArtUrl">
+        <div class="library-card" data-audio-url="@beat.AudioFileUrl" data-title="@beat.Title" data-cover="@beat.CoverArtUrl" data-artist="@beat.ArtistUsername">
             <div class="cover-wrapper">
                 <a href="@Url.Action("Details", "Beat", new { id = beat.Id })">
                     <img src="@beat.CoverArtUrl" alt="Beat Cover Art">

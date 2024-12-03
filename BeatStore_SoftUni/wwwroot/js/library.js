@@ -10,9 +10,6 @@
     const trackDurationDisplay = document.getElementById("track-duration");
     const volumeSlider = document.getElementById("volume-slider");
 
-    // Mock data for artist (optional: update with real data)
-    const artistName = "Unknown Artist";
-
     // Handle play/pause
     playPauseButton.addEventListener("click", function () {
         if (audioPlayer.paused) {
@@ -41,7 +38,7 @@
     });
 
     // Function to load a track
-    function loadTrack(url, title, cover) {
+    function loadTrack(url, title, cover, artist) {
         audioPlayer.src = url;
         audioPlayer.load();
         audioPlayer.play();
@@ -49,7 +46,7 @@
         // Update UI
         trackCover.src = cover;
         trackTitle.textContent = title;
-        trackArtist.textContent = artistName; // Mock data; update dynamically if needed
+        trackArtist.textContent = artist; // Set artist dynamically
         mediaPlayer.classList.remove("hidden");
         playPauseButton.innerHTML = '<i class="fa fa-pause"></i>';
     }
@@ -60,9 +57,10 @@
         const audioUrl = card.dataset.audioUrl;
         const title = card.dataset.title;
         const cover = card.querySelector("img").src;
+        const artist = card.dataset.artist; // Fetch artist from data attribute
 
         playButton.addEventListener("click", function () {
-            loadTrack(audioUrl, title, cover);
+            loadTrack(audioUrl, title, cover, artist);
         });
     });
 

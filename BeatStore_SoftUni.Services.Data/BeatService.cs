@@ -26,6 +26,7 @@ namespace BeatStore_SoftUni.Services.Data
             var beats = await Task.Run(() => this.beatRepository
                 .GetAllAttached()
                 .Where(b => b.IsActive)
+                .Include(b => b.Artist)
                 .Select(b => new BeatIndexDTO
                 {
                     Id = b.Id,
@@ -35,6 +36,7 @@ namespace BeatStore_SoftUni.Services.Data
                     Price = b.Price,
                     DateUploaded = b.DateUploaded,
                     AudioFileUrl = b.AudioFileUrl,
+                    ArtistUsername = b.Artist.UserName,
                     IsActive = b.IsActive
                 })
                 .ToList());

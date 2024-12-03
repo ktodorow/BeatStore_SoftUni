@@ -9,6 +9,7 @@
         public decimal Price { get; set; }
         public DateTime DateUploaded { get; set; }
         public string AudioFileUrl { get; set; } = null!; 
+        public string? ArtistUsername { get; set; }
         public bool IsActive { get; set; }
     }
 }
