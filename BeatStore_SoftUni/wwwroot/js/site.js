@@ -1,9 +1,17 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function updateCartIcon(hasItems) {
+    const cartIcon = document.getElementById("cartIcon");
+    const badge = cartIcon.querySelector("span");
 
-// Write your JavaScript code.
-<script>
-    document.querySelector('.dark-mode-toggle').addEventListener('click', function() {
-        document.body.classList.toggle('dark-mode');
+    if (hasItems) {
+        badge.style.display = "inline";
+    } else {
+        badge.style.display = "none";
+    }
+}
+
+// Fetch initial cart state (if needed)
+fetch("@Url.Action("GetCartStatus", "Cart")")
+    .then(response => response.json())
+    .then(data => {
+        updateCartIcon(data.hasItems);
     });
-</script>

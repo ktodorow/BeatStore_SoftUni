@@ -24,22 +24,19 @@ namespace BeatStore_SoftUni.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(Guid beatId)
+        public async Task<JsonResult> AddToCart(Guid beatId)
         {
             var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
-            await cartService.AddToCartAsync(userId, beatId);
             var success = await cartService.AddToCartAsync(userId, beatId);
 
-            if (!success)
+            if (success)
             {
-                TempData["ErrorMessage"] = "This item is already in your cart.";
+                return Json(new { success = true, message = "Item added to your cart successfully." });
             }
             else
             {
-                TempData["SuccessMessage"] = "Item added to your cart successfully.";
+                return Json(new { success = false, message = "This item is already in your cart." });
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -65,5 +62,15 @@ namespace BeatStore_SoftUni.Controllers
             TempData["SuccessMessage"] = "Your order has been placed successfully!";
             return RedirectToAction("BoughtBeats", "Purchase");
         }
+
+        [HttpGet]
+        public async Task<JsonResult> GetCartStatus()
+        {
+            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            var cart = await cartService.GetCartAsync(userId);
+
+            return Json(new { hasItems = cart.Items.Any() });
+        }
+
     }
 }

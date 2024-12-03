@@ -50,11 +50,49 @@
                 }
                 else
                 {
-                    <a href="@Url.Action("Buy", "Purchase", new { id = Model.Id })" class="btn btn-success">Buy</a>
-                    <form asp-action="AddToCart" asp-controller="Cart" method="post" class="d-inline">
+                    <form id="addToCartForm" method="post">
                         <input type="hidden" name="beatId" value="@Model.Id" />
-                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                        <button type="button" id="addToCartButton" class="btn btn-primary">Add to Cart</button>
                     </form>
+                    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                    <script>
+                        document.getElementById("addToCartButton").addEventListener("click", function () {
+                            const form = document.getElementById("addToCartForm");
+                            const formData = new FormData(form);
+
+                            fetch("@Url.Action("AddToCart", "Cart")", {
+                                method: "POST",
+                                body: formData
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.success) {
+                                        // Update cart icon (optional)
+                                        document.getElementById("cartIcon").classList.add("has-items");
+
+                                        // Show success message
+                                        Swal.fire({
+                                            icon: "success",
+                                            title: "Success",
+                                            text: data.message,
+                                            timer: 2000,
+                                            showConfirmButton: false
+                                        });
+                                    } else {
+                                        // Show error message
+                                        Swal.fire({
+                                            icon: "info",
+                                            title: "Info",
+                                            text: data.message,
+                                            timer: 2000,
+                                            showConfirmButton: false
+                                        });
+                                    }
+                                })
+                                .catch(error => console.error("Error:", error));
+                        });
+                    </script>
+
                 }
 
             </div>
