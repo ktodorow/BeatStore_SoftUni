@@ -28,6 +28,17 @@ namespace BeatStore_SoftUni.Controllers
         {
             var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
             await cartService.AddToCartAsync(userId, beatId);
+            var success = await cartService.AddToCartAsync(userId, beatId);
+
+            if (!success)
+            {
+                TempData["ErrorMessage"] = "This item is already in your cart.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Item added to your cart successfully.";
+            }
+
             return RedirectToAction(nameof(Index));
         }
 

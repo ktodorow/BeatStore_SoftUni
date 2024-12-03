@@ -63,7 +63,10 @@ namespace BeatStore_SoftUni.Services.Data
 
         public async Task<bool> AddToCartAsync(Guid userId, Guid beatId)
         {
-            var cart = await cartRepository.GetAllAttached().FirstOrDefaultAsync(c => c.UserId == userId);
+            var cart = await cartRepository.GetAllAttached()
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == userId);
+
             if (cart == null)
             {
                 cart = new Cart { UserId = userId };
