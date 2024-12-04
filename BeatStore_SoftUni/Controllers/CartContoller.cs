@@ -27,6 +27,15 @@ namespace BeatStore_SoftUni.Controllers
         public async Task<JsonResult> AddToCart(Guid beatId)
         {
             var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+
+            // Check if the beat is already purchased
+            var isPurchased = await cartService.IsBeatPurchasedAsync(userId, beatId);
+
+            if (isPurchased)
+            {
+                return Json(new { success = false, message = "You have already purchased this beat. It cannot be added to the cart." });
+            }
+
             var success = await cartService.AddToCartAsync(userId, beatId);
 
             if (success)

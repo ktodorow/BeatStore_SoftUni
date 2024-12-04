@@ -9,13 +9,11 @@
         .then(response => response.json())
         .then(data => {
             if (data.success) {
-                // Update cart icon (optional)
                 const cartIcon = document.getElementById("cartIcon");
                 if (cartIcon) {
                     cartIcon.classList.add("has-items");
                 }
 
-                // Show success message
                 Swal.fire({
                     icon: "success",
                     title: "Success",
@@ -24,7 +22,6 @@
                     showConfirmButton: false
                 });
             } else {
-                // Show error message
                 Swal.fire({
                     icon: "info",
                     title: "Info",

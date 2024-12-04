@@ -8,5 +8,6 @@ namespace BeatStore_SoftUni.Services.Data.Interfaces
         Task<bool> AddToCartAsync(Guid userId, Guid beatId);
         Task RemoveFromCartAsync(Guid userId, Guid beatId);
         Task<bool> CheckoutCartAsync(Guid userId);
+        Task<bool> IsBeatPurchasedAsync(Guid userId, Guid beatId);
     }
 }

@@ -63,6 +63,14 @@ namespace BeatStore_SoftUni.Services.Data
 
         public async Task<bool> AddToCartAsync(Guid userId, Guid beatId)
         {
+            var isPurchased = await purchaseRepository.GetAllAttached()
+                .AnyAsync(p => p.UserId == userId && p.BeatId == beatId);
+
+            if (isPurchased)
+            {
+                return false; 
+            }
+
             var cart = await cartRepository.GetAllAttached()
                 .Include(c => c.CartItems)
                 .FirstOrDefaultAsync(c => c.UserId == userId);
@@ -146,17 +154,21 @@ namespace BeatStore_SoftUni.Services.Data
                 });
             }
 
-            foreach (var item in alreadyPurchasedItems)
-            {
-                var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Beat.Title == item);
-                if (cartItem != null)
-                {
-                    await cartItemRepository.DeleteAsync(cartItem);
-                }
-            }
+            //foreach (var item in alreadyPurchasedItems)
+            //{
+            //    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Beat.Title == item);
+            //    if (cartItem != null)
+            //    {
+            //        await cartItemRepository.DeleteAsync(cartItem);
+            //    }
+            //}
 
             return true;
         }
-
+        public async Task<bool> IsBeatPurchasedAsync(Guid userId, Guid beatId)
+        {
+            return await purchaseRepository.GetAllAttached()
+                .AnyAsync(p => p.UserId == userId && p.BeatId == beatId);
+        }
     }
 }
