@@ -78,7 +78,7 @@ namespace BeatStore_SoftUni.Services.Data
                         Id = p.BeatId,
                         Title = p.Beat.Title,
                         Price = p.Price,
-                        CoverArtUrl = p.Beat.CoverArtUrl,
+                        //CoverArtUrl = p.Beat.CoverArtUrl,
                         DatePurchased = p.DatePurchased
                     })
                     .ToList()

@@ -55,12 +55,20 @@ namespace BeatStore_SoftUni.Controllers
 
             if (!success)
             {
-                TempData["ErrorMessage"] = "You do not have enough balance to complete the purchase.";
-                return RedirectToAction(nameof(Index)); // Redirect back to the cart page
+                TempData["ErrorMessage"] = "Unable to complete the purchase. Please check your balance or the items in your cart.";
+                return RedirectToAction(nameof(Index));
             }
 
-            TempData["SuccessMessage"] = "Your order has been placed successfully!";
-            return RedirectToAction("BoughtBeats", "Purchase");
+            if (TempData["WarningMessage"] != null)
+            {
+                TempData["SuccessMessage"] = "Your purchase was completed successfully! However, some items were already purchased.";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Your purchase was completed successfully!";
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]

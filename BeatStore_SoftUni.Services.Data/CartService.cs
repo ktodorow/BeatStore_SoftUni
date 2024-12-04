@@ -109,14 +109,31 @@ namespace BeatStore_SoftUni.Services.Data
             if (cart == null || !cart.CartItems.Any()) return false;
 
             var user = await userRepository.GetByIdAsync(userId);
-            var totalPrice = cart.CartItems.Sum(ci => ci.Beat.Price);
 
-            if (user.Balance < totalPrice) return false;
+            var purchasedBeatIds = await purchaseRepository.GetAllAttached()
+                .Where(p => p.UserId == userId)
+                .Select(p => p.BeatId)
+                .ToListAsync();
+
+            var itemsToPurchase = cart.CartItems
+                .Where(ci => !purchasedBeatIds.Contains(ci.BeatId))
+                .ToList();
+
+            var alreadyPurchasedItems = cart.CartItems
+                .Where(ci => purchasedBeatIds.Contains(ci.BeatId))
+                .Select(ci => ci.Beat.Title)
+                .ToList();
+
+            if (!itemsToPurchase.Any()) return false; // Nothing to purchase
+
+            var totalPrice = itemsToPurchase.Sum(ci => ci.Beat.Price);
+
+            if (user.Balance < totalPrice) return false; 
 
             user.Balance -= totalPrice;
             await userRepository.UpdateAsync(user);
 
-            foreach (var item in cart.CartItems)
+            foreach (var item in itemsToPurchase)
             {
                 await cartItemRepository.DeleteAsync(item);
 
@@ -129,7 +146,17 @@ namespace BeatStore_SoftUni.Services.Data
                 });
             }
 
+            foreach (var item in alreadyPurchasedItems)
+            {
+                var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Beat.Title == item);
+                if (cartItem != null)
+                {
+                    await cartItemRepository.DeleteAsync(cartItem);
+                }
+            }
+
             return true;
         }
+
     }
 }
