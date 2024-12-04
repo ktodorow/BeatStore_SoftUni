@@ -42,6 +42,11 @@ namespace BeatStore_SoftUni.Services.Data
 
         public async Task<bool> PlaceDirectOrderAsync(Guid beatId, Guid userId)
         {
+            var alreadyPurchased = await purchaseRepository.GetAllAttached()
+                .AnyAsync(p => p.UserId == userId && p.BeatId == beatId);
+
+            if (alreadyPurchased) return false;
+
             var user = await userRepository.GetByIdAsync(userId);
             var beat = await beatRepository.GetAllAttached()
                 .Where(b => b.Id == beatId && b.IsActive) // Ensure beat is active

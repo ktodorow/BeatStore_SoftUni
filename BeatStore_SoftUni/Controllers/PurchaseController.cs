@@ -38,8 +38,8 @@ namespace BeatStore_SoftUni.Controllers
 
             if (!success)
             {
-                TempData["ErrorMessage"] = "You do not have enough balance to complete the purchase.";
-                return RedirectToAction("Buy", new { id = beatId }); 
+                TempData["ErrorMessage"] = "You either don't have enough balance or have already purchased this beat.";
+                return RedirectToAction("Buy", new { id = beatId });
             }
 
             TempData["SuccessMessage"] = "Purchase completed successfully!";
