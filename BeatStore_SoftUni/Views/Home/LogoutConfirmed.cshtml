@@ -1,0 +1,19 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml"; // Ensure the layout file path is correct
+    ViewData["Title"] = "Logout Confirmation";
+}
+
+<div class="container mt-4">
+    <h1 class="text-center text-success">You have successfully logged out</h1>
+    <p class="text-center">Thank you for visiting BeatStore. See you again soon!</p>
+</div>
+
+@section Scripts {
+    <script>
+        // Ensure the media player stops after logout
+        if (window.stopPlayer) {
+            window.stopPlayer();
+        }
+        sessionStorage.clear(); // Clear media session storage
+    </script>
+}

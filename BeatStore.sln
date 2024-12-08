@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeatStore_SoftUni.ViewModel
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{B8D357DF-64FE-45AA-B14F-39DA6C193138}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatStore_SoftUni.Services.Data", "BeatStore_SoftUni.Services.Data\BeatStore_SoftUni.Services.Data.csproj", "{0C57DF17-DDDC-4F63-BD53-AD6B27249419}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeatStore_SoftUni.Services.Data", "BeatStore_SoftUni.Services.Data\BeatStore_SoftUni.Services.Data.csproj", "{0C57DF17-DDDC-4F63-BD53-AD6B27249419}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

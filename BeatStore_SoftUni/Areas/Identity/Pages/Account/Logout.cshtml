@@ -10,7 +10,7 @@
         if (User.Identity?.IsAuthenticated ?? false)
         {
             <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/", new { area = "" })" method="post">
-                <button type="submit" class="nav-link btn btn-link text-dark">Click here to Logout</button>
+                <button type="submit" id="logout-button" class="nav-link btn btn-link text-dark">Click here to Logout</button>
             </form>
         }
         else
@@ -19,3 +19,19 @@
         }
     }
 </header>
+
+@section Scripts {
+    <script>
+        document.getElementById('logout-button').addEventListener('click', function () {
+            // Stop audio playback
+            if (window.audioPlayer) {
+                window.audioPlayer.pause();
+            }
+
+            // Clear session and local storage
+            sessionStorage.removeItem('currentTrack');
+            sessionStorage.removeItem('currentTime');
+            localStorage.removeItem('playerVolume');
+        });
+    </script>
+}

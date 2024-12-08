@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
     const mediaPlayer = document.getElementById("media-player");
     const trackCover = document.getElementById("track-cover");
-    const trackCoverContainer = trackCover.parentElement; // Anchor wrapping the cover
+    const trackCoverContainer = trackCover.parentElement;
     const trackTitle = document.getElementById("track-title");
     const trackArtist = document.getElementById("track-artist");
     const playPauseButton = document.getElementById("play-pause-button");
@@ -13,6 +13,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let currentTrack = sessionStorage.getItem("currentTrack") || null;
     let currentTime = sessionStorage.getItem("currentTime") || 0;
+    let savedVolume = localStorage.getItem("playerVolume") || 1;
+
+    audioPlayer.volume = parseFloat(savedVolume);
+    volumeSlider.value = savedVolume;
 
     if (currentTrack) {
         loadTrack(JSON.parse(currentTrack));
@@ -44,7 +48,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     volumeSlider.addEventListener("input", function () {
-        audioPlayer.volume = volumeSlider.value;
+        const volume = volumeSlider.value;
+        audioPlayer.volume = volume;
+
+        localStorage.setItem("playerVolume", volume);
     });
 
     function loadTrack(track) {
@@ -53,8 +60,8 @@ document.addEventListener("DOMContentLoaded", function () {
         audioPlayer.play();
 
         trackCover.src = track.cover;
-        trackCoverContainer.href = track.detailsUrl; 
-        trackCoverContainer.style.display = "block"; 
+        trackCoverContainer.href = track.detailsUrl;
+        trackCoverContainer.style.display = "block";
         trackTitle.textContent = track.title;
         trackArtist.textContent = track.artist;
         mediaPlayer.classList.remove("hidden");
@@ -64,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function hideTrackCover() {
-        trackCoverContainer.style.display = "none"; // Hide the cover if no track is playing
+        trackCoverContainer.style.display = "none";
         trackTitle.textContent = "No track playing";
         trackArtist.textContent = "Unknown Artist";
     }
@@ -83,10 +90,15 @@ document.addEventListener("DOMContentLoaded", function () {
             loadTrack(track);
         }
     });
-
     function formatTime(seconds) {
         const minutes = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
         return `${minutes}:${secs < 10 ? "0" + secs : secs}`;
     }
+    window.stopPlayer = function () {
+        audioPlayer.pause();
+        audioPlayer.currentTime = 0;
+        sessionStorage.clear();
+        hideTrackCover();
+    };
 });
