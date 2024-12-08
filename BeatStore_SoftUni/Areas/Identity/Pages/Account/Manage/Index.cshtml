@@ -1,0 +1,38 @@
+﻿@page
+@model BeatStore_SoftUni.Areas.Identity.Pages.Account.Manage.IndexModel
+
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<div class="profile-page">
+    <h2>@ViewData["Title"]</h2>
+
+    <form id="profile-form" method="post" enctype="multipart/form-data">
+        <!-- Username Section -->
+        <div class="form-group">
+            <label for="Username">Username</label>
+            <input asp-for="Input.Username" class="form-control" placeholder="Enter your username" />
+            <span asp-validation-for="Input.Username" class="text-danger"></span>
+        </div>
+
+        <!-- Profile Picture Section -->
+        <div class="form-group mt-3">
+            <label for="ProfilePicture">Profile Picture</label>
+            @if (!string.IsNullOrEmpty(Model.Input.ProfilePicturePath))
+            {
+                <img src="@Model.Input.ProfilePicturePath" alt="Profile Picture" class="rounded-circle mt-2"
+                     style="width: 100px; height: 100px; object-fit: cover;" />
+            }
+            <input type="file" id="ProfilePicture" name="Input.ProfilePicture" class="form-control mt-2" />
+        </div>
+
+        <button type="button" id="update-profile-button" class="btn btn-primary mt-3">Update Profile</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/profile.js" asp-append-version="true"></script>
+}
