@@ -62,4 +62,35 @@
     <!-- Page-Specific Scripts -->
     @await RenderSectionAsync("Scripts", required: false)
 </body>
+
+<footer id="media-player" class="media-player">
+    <div class="player-left">
+        <a id="cover-link" href="#" target="_blank">
+            <img id="track-cover" src="" alt="Track Cover" class="track-cover" />
+        </a>
+        <div class="track-info">
+            <span id="track-title" class="track-title">No track playing</span>
+            <span id="track-artist" class="track-artist">Unknown Artist</span>
+        </div>
+    </div>
+    <div class="player-center">
+        <div class="player-controls">
+            <button id="prev-button" class="control-button"><i class="fa fa-step-backward"></i></button>
+            <button id="play-pause-button" class="control-button"><i class="fa fa-play"></i></button>
+            <button id="next-button" class="control-button"><i class="fa fa-step-forward"></i></button>
+        </div>
+        <div class="progress-container">
+            <span id="current-time">0:00</span>
+            <input id="progress-bar" type="range" min="0" max="100" value="0">
+            <span id="track-duration">0:00</span>
+        </div>
+    </div>
+    <div class="player-right">
+        <button id="volume-button" class="control-button"><i class="fa fa-volume-up"></i></button>
+        <input id="volume-slider" type="range" min="0" max="1" step="0.1" value="1">
+    </div>
+</footer>
+
+<script src="~/js/global-player.js" asp-append-version="true"></script>
+
 </html>

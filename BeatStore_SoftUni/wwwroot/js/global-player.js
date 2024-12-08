@@ -1,6 +1,7 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const mediaPlayer = document.getElementById("media-player");
     const trackCover = document.getElementById("track-cover");
+    const trackCoverContainer = trackCover.parentElement; // Anchor wrapping the cover
     const trackTitle = document.getElementById("track-title");
     const trackArtist = document.getElementById("track-artist");
     const playPauseButton = document.getElementById("play-pause-button");
@@ -10,7 +11,16 @@
     const trackDurationDisplay = document.getElementById("track-duration");
     const volumeSlider = document.getElementById("volume-slider");
 
-    // Handle play/pause
+    let currentTrack = sessionStorage.getItem("currentTrack") || null;
+    let currentTime = sessionStorage.getItem("currentTime") || 0;
+
+    if (currentTrack) {
+        loadTrack(JSON.parse(currentTrack));
+        audioPlayer.currentTime = parseFloat(currentTime);
+    } else {
+        hideTrackCover();
+    }
+
     playPauseButton.addEventListener("click", function () {
         if (audioPlayer.paused) {
             audioPlayer.play();
@@ -21,52 +31,59 @@
         }
     });
 
-    // Update progress bar and time
     audioPlayer.addEventListener("timeupdate", function () {
         progressBar.value = (audioPlayer.currentTime / audioPlayer.duration) * 100;
         currentTimeDisplay.textContent = formatTime(audioPlayer.currentTime);
         trackDurationDisplay.textContent = formatTime(audioPlayer.duration);
+
+        sessionStorage.setItem("currentTime", audioPlayer.currentTime);
     });
 
     progressBar.addEventListener("input", function () {
         audioPlayer.currentTime = (progressBar.value / 100) * audioPlayer.duration;
     });
 
-    // Volume control
     volumeSlider.addEventListener("input", function () {
         audioPlayer.volume = volumeSlider.value;
     });
 
-    // Function to load a track
-    function loadTrack(url, title, cover, artist, detailsUrl) {
-        audioPlayer.src = url;
+    function loadTrack(track) {
+        audioPlayer.src = track.audioUrl;
         audioPlayer.load();
         audioPlayer.play();
 
-        // Update UI
-        trackCover.src = cover;
-        trackCover.parentElement.href = detailsUrl; // Set the cover art link
-        trackTitle.textContent = title;
-        trackArtist.textContent = artist;
+        trackCover.src = track.cover;
+        trackCoverContainer.href = track.detailsUrl; 
+        trackCoverContainer.style.display = "block"; 
+        trackTitle.textContent = track.title;
+        trackArtist.textContent = track.artist;
         mediaPlayer.classList.remove("hidden");
         playPauseButton.innerHTML = '<i class="fa fa-pause"></i>';
+
+        sessionStorage.setItem("currentTrack", JSON.stringify(track));
     }
 
-    // Attach event to play button on each beat card
-    document.querySelectorAll(".library-card").forEach(card => {
-        const playButton = card.querySelector(".play-button");
-        const audioUrl = card.dataset.audioUrl;
-        const title = card.dataset.title;
-        const cover = card.querySelector("img").src;
-        const artist = card.dataset.artist;
-        const detailsUrl = card.dataset.detailsUrl; // Fetch the Details URL from data attribute
+    function hideTrackCover() {
+        trackCoverContainer.style.display = "none"; // Hide the cover if no track is playing
+        trackTitle.textContent = "No track playing";
+        trackArtist.textContent = "Unknown Artist";
+    }
 
-        playButton.addEventListener("click", function () {
-            loadTrack(audioUrl, title, cover, artist, detailsUrl);
-        });
+    document.body.addEventListener("click", function (event) {
+        const button = event.target.closest(".play-button");
+        if (button) {
+            const card = button.closest(".library-card");
+            const track = {
+                audioUrl: card.dataset.audioUrl,
+                title: card.dataset.title,
+                cover: card.dataset.cover,
+                artist: card.dataset.artist,
+                detailsUrl: card.dataset.detailsUrl,
+            };
+            loadTrack(track);
+        }
     });
 
-    // Utility function to format time in mm:ss
     function formatTime(seconds) {
         const minutes = Math.floor(seconds / 60);
         const secs = Math.floor(seconds % 60);
