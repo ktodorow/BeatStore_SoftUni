@@ -28,4 +28,8 @@
     <ProjectReference Include="..\BeatStore_SoftUni.ViewModels\BeatStore_SoftUni.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>
