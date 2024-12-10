@@ -291,3 +291,16 @@ body {
 .navbar-brand:hover {
     color: #17a94b;
 }
+
+.btn-danger {
+    background-color: #d9534f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-danger:hover {
+    background-color: #c9302c;
+    color: white;
+}

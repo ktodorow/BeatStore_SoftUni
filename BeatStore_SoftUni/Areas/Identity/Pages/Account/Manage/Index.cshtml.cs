@@ -6,6 +6,7 @@ using BeatStore_SoftUni.ViewModels;
 using System.IO;
 using System.Threading.Tasks;
 using BeatStore_SoftUni.ViewModels.ApplicationUserDTO;
+using System;
 
 namespace BeatStore_SoftUni.Areas.Identity.Pages.Account.Manage
 {
@@ -37,13 +38,13 @@ namespace BeatStore_SoftUni.Areas.Identity.Pages.Account.Manage
             Input = new ProfileViewModel
             {
                 Username = user.UserName,
-                ProfilePicturePath = user.ProfilePicture
+                ProfilePicturePath = string.IsNullOrEmpty(user.ProfilePicture) ? "/images/avatar.jpg" : user.ProfilePicture
             };
 
             return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string action)
         {
             var user = await _userManager.GetUserAsync(User);
 
@@ -52,7 +53,24 @@ namespace BeatStore_SoftUni.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            // Update Username
+            if (action == "remove")
+            {
+                if (!string.IsNullOrEmpty(user.ProfilePicture) && user.ProfilePicture != "/images/avatar.jpg")
+                {
+                    var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, user.ProfilePicture.TrimStart('/'));
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
+
+                user.ProfilePicture = "/images/avatar.jpg";
+                await _userManager.UpdateAsync(user);
+
+                TempData["StatusMessage"] = "Profile picture removed successfully.";
+                return RedirectToPage();
+            }
+
             if (!string.IsNullOrWhiteSpace(Input.Username) && Input.Username != user.UserName)
             {
                 var usernameResult = await _userManager.SetUserNameAsync(user, Input.Username);
@@ -66,11 +84,19 @@ namespace BeatStore_SoftUni.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            // Update Profile Picture
             if (Input.ProfilePicture != null)
             {
                 var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "images/profiles");
                 Directory.CreateDirectory(uploadsFolder);
+
+                if (!string.IsNullOrEmpty(user.ProfilePicture) && user.ProfilePicture != "/images/avatar.jpg")
+                {
+                    var oldFilePath = Path.Combine(_webHostEnvironment.WebRootPath, user.ProfilePicture.TrimStart('/'));
+                    if (System.IO.File.Exists(oldFilePath))
+                    {
+                        System.IO.File.Delete(oldFilePath);
+                    }
+                }
 
                 var uniqueFileName = $"{user.Id}_{Path.GetFileName(Input.ProfilePicture.FileName)}";
                 var filePath = Path.Combine(uploadsFolder, uniqueFileName);
@@ -82,6 +108,8 @@ namespace BeatStore_SoftUni.Areas.Identity.Pages.Account.Manage
 
                 user.ProfilePicture = $"/images/profiles/{uniqueFileName}";
                 await _userManager.UpdateAsync(user);
+
+                TempData["StatusMessage"] = "Profile picture updated successfully.";
             }
 
             return RedirectToPage();
