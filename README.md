@@ -33,7 +33,7 @@ BeatStore is a modern web application designed to serve as a platform for sellin
 
 ## **Technology Stack**
 - **Back-end**: ASP.NET Core 8.0
-- **Front-end**: Razor Pages (with possible extension to modern JavaScript frameworks)
+- **Front-end**: Razor Pages, JavaScript, SweetAlert2, Bootstrap
 - **Database**: SQL Server
 - **Containerization**: Docker and Docker Compose
 
