@@ -27,7 +27,7 @@ Before deploying the application, ensure the following are available:
 Clone the BeatStore repository to your local environment:
 ```bash
 git clone https://github.com/ktodorow/BeatStore_SoftUni
-cd BeatStore
+cd BeatStore_SoftUni
 ```
 
 ### 2. Build and Start the Application
