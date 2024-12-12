@@ -8,10 +8,3 @@
         badge.style.display = "none";
     }
 }
-
-// Fetch initial cart state (if needed)
-fetch("@Url.Action("GetCartStatus", "Cart")")
-    .then(response => response.json())
-    .then(data => {
-        updateCartIcon(data.hasItems);
-    });

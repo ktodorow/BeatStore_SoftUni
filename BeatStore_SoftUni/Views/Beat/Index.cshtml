@@ -13,7 +13,6 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-<h1 class="text-center mt-4 text-white">Library</h1>
 
 @if (TempData["ErrorMessage"] != null)
 {
@@ -28,6 +27,13 @@
         </div>
     </div>
 }
+
+<div class="library-header">
+    <h1 class="library-title">Library</h1>
+    <a href="@Url.Action("Create", "Beat")" class="upload-button">
+        <i class="fa fa-cloud-upload-alt"> Upload Beat</i>
+    </a>
+</div>
 
 <div class="library-container">
     @foreach (var beat in Model.Where(b => b.IsActive))
