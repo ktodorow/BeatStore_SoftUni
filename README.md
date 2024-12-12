@@ -40,4 +40,4 @@ BeatStore is a modern web application designed to serve as a platform for sellin
 ---
 
 ## **Getting Started**
-Follow the [Deploy.md](Deploy.md) file for detailed deployment instructions.
+Follow the [DEPLOY.md](DEPLOY.md) file for detailed deployment instructions.
