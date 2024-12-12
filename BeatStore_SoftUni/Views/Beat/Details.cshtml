@@ -1,4 +1,7 @@
-﻿@model BeatStore_SoftUni.ViewModels.BeatDtos.BeatDetailsDTO
+﻿
+
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+@model BeatStore_SoftUni.ViewModels.BeatDtos.BeatDetailsDTO
 
 @section Styles {
     <link rel="stylesheet" href="~/css/beat-details.css" asp-append-version="true">
@@ -7,7 +10,8 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/addToCart.js" asp-append-version="true"></script>
-    <script src="~/js/deleteConfirmation.js"></script>
+    <script src="~/js/deleteConfirmation.js" asp-append-version="true"></script>
+    <script src="~/js/comment.js" asp-append-version="true"></script>
 }
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -53,11 +57,35 @@
                 {
                     <a href="@Url.Action("Buy", "Purchase", new { id = Model.Id })" class="btn btn-success">Buy</a>
                     <form id="addToCartForm" method="post" action="@Url.Action("AddToCart", "Cart")" class="d-inline">
-                        <input type="hidden" name="beatId" value="@Model.Id" />
+                        <input type="hidden" id="beat-id" value="@Model.Id" />
                         <button type="button" id="addToCartButton" class="btn btn-primary">Add to Cart</button>
                     </form>
                 }
             </div>
         </div>
+
+        <div class="comments-section mt-5">
+            <h2>Comments</h2>
+
+            <div id="comments-list">
+                @* Comments will be dynamically loaded via JavaScript *@
+            </div>
+
+            @if (User.Identity.IsAuthenticated)
+            {
+                <form id="add-comment-form" method="post">
+                    @Html.AntiForgeryToken()
+                    <div class="form-group">
+                        <textarea id="comment-content" class="form-control" placeholder="Write a comment..." rows="3"></textarea>
+                    </div>
+                    <button type="button" id="add-comment-button" class="btn btn-primary mt-2">Add Comment</button>
+                </form>
+            }
+            else
+            {
+                <p class="text-muted mt-3">You must be logged in to add comments.</p>
+            }
+        </div>
+
     </div>
 </div>

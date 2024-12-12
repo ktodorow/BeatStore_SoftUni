@@ -30,6 +30,7 @@ builder.Services.AddScoped(typeof(IRepository<,>), typeof(BaseRepository<,>));
 builder.Services.AddScoped<IBeatService, BeatService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<ICommentService, CommentService>();
 
 
 builder.Services.AddControllersWithViews();

@@ -28,4 +28,9 @@ public class Comment
 
     [Required]
     public DateTime DatePosted { get; set; }
+
+    public DateTime? EditedOn { get; set; }
+
+    [Required]
+    public bool IsDeleted { get; set; } = false;
 }
