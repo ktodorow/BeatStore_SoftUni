@@ -1,12 +1,12 @@
 using BeatStore_SoftUni.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 using BeatStore_SoftUni.Data.Models;
 using BeatStore_SoftUni.Data.Repository.Interfaces;
 using BeatStore_SoftUni.Data.Repository;
 using BeatStore_SoftUni.Services.Data;
 using BeatStore_SoftUni.Services.Data.Interfaces;
+using static BeatStore_SoftUni.ProgramExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,4 +62,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 
+app.MigrateDatabase<ApplicationDbContext>();
+await SeedData.SeedDatabase(app.Services);
 app.Run();
