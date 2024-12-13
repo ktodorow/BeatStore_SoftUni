@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # This script removes all 'bin' and 'obj' folders recursively from the current directory.
-
+# I USE THIS SCRIPT WITH WSL
 # Check if the user is in the right directory
 echo "You are about to delete all 'bin' and 'obj' folders in $(pwd)."
 echo "Are you sure? (y/n)"
