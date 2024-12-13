@@ -1,5 +1,6 @@
 ﻿using Xunit;
 using Moq;
+using System.Linq.Expressions;
 using BeatStore_SoftUni.Services.Data;
 using BeatStore_SoftUni.Services.Data.Interfaces;
 using BeatStore_SoftUni.Data.Models;
@@ -82,6 +83,39 @@ namespace BeatStore.Tests.Services
             Assert.Equal("Hip-Hop", firstBeat.Genre);
             Assert.Equal("Artist1", firstBeat.ArtistUsername);
             Assert.True(firstBeat.IsActive);
+        }
+
+        [Fact]
+        public async Task CreateBeatAsync_CreatesNewBeatWithGenres()
+        {
+            // Arrange
+            var artistId = Guid.NewGuid();
+            var genreIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
+
+            var createBeatDto = new CreateBeatDTO
+            {
+                Title = "New Beat",
+                Price = 19.99m,
+                AudioFileUrl = "https://example.com/audio.mp3",
+                CoverArtUrl = "https://example.com/cover.png",
+                GenreIds = genreIds
+            };
+
+            // Act
+            await _beatService.CreateBeatAsync(createBeatDto, artistId);
+
+            // Assert
+            _mockBeatRepository.Verify(repo => repo.AddAsync(It.Is<Beat>(b =>
+                b.Title == "New Beat" &&
+                b.Price == 19.99m &&
+                b.AudioFileUrl == "https://example.com/audio.mp3" &&
+                b.CoverArtUrl == "https://example.com/cover.png" &&
+                b.ArtistId == artistId
+            )), Times.Once);
+
+            _mockBeatGenreRepository.Verify(repo => repo.AddAsync(It.Is<BeatGenre>(bg =>
+                genreIds.Contains(bg.GenreId)
+            )), Times.Exactly(2));
         }
     }
 }
