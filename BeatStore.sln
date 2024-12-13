@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{B8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BeatStore_SoftUni.Services.Data", "BeatStore_SoftUni.Services.Data\BeatStore_SoftUni.Services.Data.csproj", "{0C57DF17-DDDC-4F63-BD53-AD6B27249419}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{22EC0DB8-7041-4A1E-83C0-F0DB00AEC0E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatStore_SoftUni.Tests", "BeatStore_SoftUni.Tests\BeatStore_SoftUni.Tests.csproj", "{0A760EA4-9471-4BF8-8D71-2CE3FFA81430}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,10 @@ Global
 		{0C57DF17-DDDC-4F63-BD53-AD6B27249419}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C57DF17-DDDC-4F63-BD53-AD6B27249419}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C57DF17-DDDC-4F63-BD53-AD6B27249419}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A760EA4-9471-4BF8-8D71-2CE3FFA81430}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A760EA4-9471-4BF8-8D71-2CE3FFA81430}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A760EA4-9471-4BF8-8D71-2CE3FFA81430}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A760EA4-9471-4BF8-8D71-2CE3FFA81430}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -61,6 +69,7 @@ Global
 		{7B8813E3-9E99-4DE0-9DC0-FB3438E58FF2} = {97FA4DDA-981F-46C0-B564-80E47D055F2D}
 		{29846B4F-B53F-4D81-94A3-96E72A85B7FA} = {748649A6-8D73-45BB-B005-302DFAEF3B60}
 		{0C57DF17-DDDC-4F63-BD53-AD6B27249419} = {B8D357DF-64FE-45AA-B14F-39DA6C193138}
+		{0A760EA4-9471-4BF8-8D71-2CE3FFA81430} = {22EC0DB8-7041-4A1E-83C0-F0DB00AEC0E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {79C24962-DA67-481B-8869-69F88CF91870}
