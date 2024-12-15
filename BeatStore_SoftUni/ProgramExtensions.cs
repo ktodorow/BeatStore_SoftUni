@@ -1,7 +1,6 @@
+using static BeatStore_SoftUni.Common.ErrorMessages;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using System;
 
 namespace BeatStore_SoftUni
 {
@@ -19,7 +18,7 @@ namespace BeatStore_SoftUni
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error migrating database: {ex.Message}");
+                    Console.WriteLine($"{ErrMigration} {ex.Message}");
                 }
             }
 

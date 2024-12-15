@@ -1,5 +1,7 @@
 ﻿using BeatStore_SoftUni.Services.Data.Interfaces;
 using BeatStore_SoftUni.ViewModels.BeatDtos;
+using static BeatStore_SoftUni.Common.ErrorMessages;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +33,7 @@ namespace BeatStore_SoftUni.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateBeatDTO model)
         {
             if (!ModelState.IsValid)
@@ -44,7 +47,7 @@ namespace BeatStore_SoftUni.Controllers
 
             if (string.IsNullOrEmpty(artistIdClaim) || !Guid.TryParse(artistIdClaim, out var artistId))
             {
-                ModelState.AddModelError("", "Unable to retrieve artist information. Please log in again.");
+                ModelState.AddModelError("", ErrUnableToRetrieveInformation);
                 var genres = await this.beatService.GetGenresAsync();
                 ViewBag.Genres = genres;
                 return View(model);
@@ -73,7 +76,7 @@ namespace BeatStore_SoftUni.Controllers
             {
                 if (beatDetails == null || !beatDetails.IsActive)
                 {
-                    TempData["ErrorMessage"] = "This beat is no longer available.";
+                    TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
                     return RedirectToAction("Index", "Beat");
                 }
             }
@@ -90,7 +93,7 @@ namespace BeatStore_SoftUni.Controllers
 
             if (model == null || !model.IsActive)
             {
-                TempData["ErrorMessage"] = "This beat is no longer available.";
+                TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
                 return RedirectToAction("Index", "Beat");
             }
 
@@ -99,6 +102,7 @@ namespace BeatStore_SoftUni.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(EditBeatDTO model)
         {
             if (!ModelState.IsValid)

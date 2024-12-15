@@ -38,7 +38,8 @@ namespace BeatStore_SoftUni.Areas.Identity.Pages.Account.Manage
             Input = new ProfileViewModel
             {
                 Username = user.UserName,
-                ProfilePicturePath = string.IsNullOrEmpty(user.ProfilePicture) ? "/images/avatar.jpg" : user.ProfilePicture
+                ProfilePicturePath = string.IsNullOrEmpty(user.ProfilePicture) ? "/images/avatar.jpg" : user.ProfilePicture,
+                Balance = user.Balance
             };
 
             return Page();

@@ -304,3 +304,30 @@ body {
     background-color: #c9302c;
     color: white;
 }
+
+/* Fix for Select2 dropdown text color */
+.select2-container--default .select2-results__option {
+    color: #000; 
+    background-color: #fff; 
+}
+
+/* Highlight the selected item in the dropdown */
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #357ABD;
+    color: #fff;
+}
+
+/* Style for the dropdown itself */
+.select2-container--default .select2-selection--multiple {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ced4da; 
+}
+
+.toast-body {
+    color: black !important;
+}
+
+#error-toast .toast-body {
+    color: black !important;
+}

@@ -1,12 +1,13 @@
 using BeatStore_SoftUni.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using BeatStore_SoftUni.Data.Models;
 using BeatStore_SoftUni.Data.Repository.Interfaces;
 using BeatStore_SoftUni.Data.Repository;
 using BeatStore_SoftUni.Services.Data;
 using BeatStore_SoftUni.Services.Data.Interfaces;
 using static BeatStore_SoftUni.ProgramExtensions;
+
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +21,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false; // Disable email confirmation for accounts
-    options.User.RequireUniqueEmail = false;       // Disable email uniqueness if email isn't used
+    options.User.RequireUniqueEmail = true;       
 })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders()
@@ -32,9 +33,7 @@ builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
 
-
 builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
  
 WebApplication app = builder.Build();
 
@@ -45,8 +44,8 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseExceptionHandler("/Errors/500");
+    app.UseStatusCodePagesWithReExecute("/Errors/{0}");
     app.UseHsts();
 }
 
@@ -55,13 +54,18 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapFallbackToController("NotFoundPage", "Errors");
+
 app.MapRazorPages();
 
 app.MigrateDatabase<ApplicationDbContext>();
 await SeedData.SeedDatabase(app.Services);
+
 app.Run();

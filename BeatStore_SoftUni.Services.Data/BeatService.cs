@@ -2,6 +2,7 @@
 using BeatStore_SoftUni.Data.Repository.Interfaces;
 using BeatStore_SoftUni.Services.Data.Interfaces;
 using BeatStore_SoftUni.ViewModels.BeatDtos;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace BeatStore_SoftUni.Services.Data
@@ -129,15 +130,18 @@ namespace BeatStore_SoftUni.Services.Data
 
         public async Task<bool> EditBeatAsync(EditBeatDTO model, Guid userId)
         {
-            var beat = await this.beatRepository
+            var beat = this.beatRepository
                 .GetAllAttached()
                 .Include(b => b.BeatGenres)
-                .FirstOrDefaultAsync(b => b.Id == model.Id && b.ArtistId == userId);
+                .ThenInclude(bg => bg.Genre)
+                .FirstOrDefault(b => b.Id == model.Id && b.ArtistId == userId);
 
             if (beat == null)
             {
-                return false; 
+                return false;
             }
+
+;
 
             beat.Title = model.Title;
             beat.Price = model.Price;
@@ -161,12 +165,13 @@ namespace BeatStore_SoftUni.Services.Data
                 var beatGenreToRemove = beat.BeatGenres.FirstOrDefault(bg => bg.GenreId == genreId);
                 if (beatGenreToRemove != null)
                 {
-                    beat.BeatGenres.Remove(beatGenreToRemove);
+                    await this.beatGenreRepository.DeleteAsync(beatGenreToRemove);
                 }
             }
 
             return await this.beatRepository.UpdateAsync(beat);
         }
+
         public async Task<bool> SoftDeleteBeatAsync(Guid beatId, Guid userId)
         {
             var beat = await this.beatRepository.FirstOrDefaultAsync(b => b.Id == beatId && b.ArtistId == userId);

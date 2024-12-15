@@ -12,11 +12,10 @@
         @foreach (var beat in Model)
         {
             <div class="bought-beat-item">
-                <img src="@beat.CoverArtUrl" alt="Cover Art" class="bought-beat-image" />
                 <div class="bought-beat-details">
                     <h4>@beat.Title</h4>
                     <p><strong>Price:</strong> $@beat.Price</p>
-                    <p><strong>Purchased On:</strong> @beat.DatePurchased.ToString("MMMM dd, yyyy")</p>
+                    <p><strong>Purchased On:</strong> @beat.DatePurchased.ToString("dd MMMM, yyyy")</p>
                 </div>
             </div>
         }

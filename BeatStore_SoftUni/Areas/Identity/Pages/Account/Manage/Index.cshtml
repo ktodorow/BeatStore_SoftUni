@@ -6,8 +6,17 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
+<div class="form-group">
+    <label>Balance</label>
+    <div class="form-control" style="font-weight: bold;">
+        $@Model.Input.Balance
+    </div>
+</div>
+
+
 <div class="profile-page">
     <h2>@ViewData["Title"]</h2>
+
 
     <form id="profile-form" method="post" enctype="multipart/form-data">
         <div class="form-group">

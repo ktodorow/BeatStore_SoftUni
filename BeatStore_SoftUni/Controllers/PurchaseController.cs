@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using BeatStore_SoftUni.Services.Data.Interfaces;
+using static BeatStore_SoftUni.Common.Messages;
+using static BeatStore_SoftUni.Common.ErrorMessages;
+
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using BeatStore_SoftUni.Services.Data.Interfaces;
+
 using System.Threading.Tasks;
+
 
 namespace BeatStore_SoftUni.Controllers
 {
@@ -23,7 +28,7 @@ namespace BeatStore_SoftUni.Controllers
 
             if (purchaseDetails == null)
             {
-                TempData["ErrorMessage"] = "The beat you are trying to purchase is no longer available.";
+                TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
                 return RedirectToAction("Index", "Beat");
             }
 
@@ -38,11 +43,11 @@ namespace BeatStore_SoftUni.Controllers
 
             if (!success)
             {
-                TempData["ErrorMessage"] = "You either don't have enough balance or have already purchased this beat.";
+                TempData["ErrorMessage"] = ErrPurchase;
                 return RedirectToAction("Buy", new { id = beatId });
             }
 
-            TempData["SuccessMessage"] = "Purchase completed successfully!";
+            TempData["SuccessMessage"] = CompletePurchase;
             return RedirectToAction("BoughtBeats");
         }
 

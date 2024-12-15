@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using BeatStore_SoftUni.Services.Data.Interfaces;
+﻿using BeatStore_SoftUni.Services.Data.Interfaces;
+using static BeatStore_SoftUni.Common.Messages;
+using static BeatStore_SoftUni.Common.ErrorMessages;
+
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+
 
 namespace BeatStore_SoftUni.Controllers
 {
@@ -33,18 +38,18 @@ namespace BeatStore_SoftUni.Controllers
 
             if (isPurchased)
             {
-                return Json(new { success = false, message = "You have already purchased this beat. It cannot be added to the cart." });
+                return Json(new { success = false, message = ErrAlreadyPurchasedBeatCart });
             }
 
             var success = await cartService.AddToCartAsync(userId, beatId);
 
             if (success)
             {
-                return Json(new { success = true, message = "Item added to your cart successfully." });
+                return Json(new { success = true, message = ItemAddedSuccessfully });
             }
             else
             {
-                return Json(new { success = false, message = "This item is already in your cart." });
+                return Json(new { success = false, message = ErrItemAlreadyAddedInCart });
             }
         }
 
@@ -64,17 +69,17 @@ namespace BeatStore_SoftUni.Controllers
 
             if (!success)
             {
-                TempData["ErrorMessage"] = "Unable to complete the purchase. Please check your balance or the items in your cart.";
+                TempData["ErrorMessage"] = ErrUnableToCompletePurchase;
                 return RedirectToAction(nameof(Index));
             }
 
             if (TempData["WarningMessage"] != null)
             {
-                TempData["SuccessMessage"] = "Your purchase was completed successfully! However, some items were already purchased.";
+                TempData["SuccessMessage"] = CompletePurchasePartly;
             }
             else
             {
-                TempData["SuccessMessage"] = "Your purchase was completed successfully!";
+                TempData["SuccessMessage"] = CompletePurchase;
             }
 
             return RedirectToAction(nameof(Index));

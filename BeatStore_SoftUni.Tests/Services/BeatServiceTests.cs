@@ -117,5 +117,63 @@ namespace BeatStore.Tests.Services
                 genreIds.Contains(bg.GenreId)
             )), Times.Exactly(2));
         }
+
+        [Fact]
+        public async Task SoftDeleteBeatAsync_SetsBeatAsInactiveAndUpdatesSuccessfully()
+        {
+            // Arrange
+            var beatId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+
+            var beat = new Beat
+            {
+                Id = beatId,
+                ArtistId = userId,
+                IsActive = true // Initially active
+            };
+
+            _mockBeatRepository.Setup(repo => repo.FirstOrDefaultAsync(It.IsAny<Expression<Func<Beat, bool>>>()))
+                .ReturnsAsync(beat);
+
+            _mockBeatRepository.Setup(repo => repo.UpdateAsync(It.IsAny<Beat>()))
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _beatService.SoftDeleteBeatAsync(beatId, userId);
+
+            // Assert
+            Assert.True(result); // Ensure the method returns true
+
+            // Verify that IsActive is set to false
+            Assert.False(beat.IsActive);
+
+            // Verify that UpdateAsync is called with the modified beat
+            _mockBeatRepository.Verify(repo => repo.UpdateAsync(It.Is<Beat>(b =>
+                b.Id == beatId &&
+                b.ArtistId == userId &&
+                !b.IsActive
+            )), Times.Once);
+        }
+
+        [Fact]
+        public async Task SoftDeleteBeatAsync_ReturnsFalseIfBeatNotFound()
+        {
+            // Arrange
+            var beatId = Guid.NewGuid();
+            var userId = Guid.NewGuid();
+
+            // Mock the repository to return null (no beat found)
+            _mockBeatRepository.Setup(repo => repo.FirstOrDefaultAsync(It.IsAny<Expression<Func<Beat, bool>>>()))
+                .ReturnsAsync((Beat?)null);
+
+            // Act
+            var result = await _beatService.SoftDeleteBeatAsync(beatId, userId);
+
+            // Assert
+            Assert.False(result); // Ensure the method returns false
+
+            // Verify that UpdateAsync is never called
+            _mockBeatRepository.Verify(repo => repo.UpdateAsync(It.IsAny<Beat>()), Times.Never);
+        }
     }
 }
