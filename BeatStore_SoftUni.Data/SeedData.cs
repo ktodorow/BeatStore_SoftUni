@@ -76,7 +76,7 @@ namespace BeatStore_SoftUni.Data
                         new Beat
                         {
                             Id = Guid.NewGuid(),
-                            Title = "Chill Vibes",
+                            Title = "Chill Vibes1",
                             ArtistId = user.Id,
                             Price = 4.99m,
                             AudioFileUrl = "https://commondatastorage.googleapis.com/codeskulptor-demos/DDR_assets/Kangaroo_MusiQue_-_The_Neverwritten_Role_Playing_Game.mp3",
