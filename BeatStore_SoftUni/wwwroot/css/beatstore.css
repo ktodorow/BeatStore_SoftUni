@@ -225,12 +225,12 @@ body {
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-.profile-page h2 {
-    text-align: center;
-    font-size: 1.8rem;
-    color: #1db954; /* Spotify green */
-    margin-bottom: 20px;
-}
+    .profile-page h2 {
+        text-align: center;
+        font-size: 1.8rem;
+        color: #1db954; /* Spotify green */
+        margin-bottom: 20px;
+    }
 
 .form-group label {
     font-weight: bold;
@@ -243,11 +243,11 @@ body {
     border: 1px solid #444;
 }
 
-.form-group input:focus {
-    border-color: #1db954;
-    outline: none;
-    box-shadow: 0 0 5px #1db954;
-}
+    .form-group input:focus {
+        border-color: #1db954;
+        outline: none;
+        box-shadow: 0 0 5px #1db954;
+    }
 
 .form-group img {
     display: block;
@@ -263,9 +263,9 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.btn-primary:hover {
-    background-color: #17a94b;
-}
+    .btn-primary:hover {
+        background-color: #17a94b;
+    }
 
 /* Navbar Styling */
 .navbar {
@@ -273,14 +273,14 @@ body {
     border-bottom: 1px solid #444;
 }
 
-.navbar a {
-    color: #1db954; /* Spotify green */
-    font-weight: bold;
-}
+    .navbar a {
+        color: #1db954; /* Spotify green */
+        font-weight: bold;
+    }
 
-.navbar a:hover {
-    color: #17a94b;
-}
+        .navbar a:hover {
+            color: #17a94b;
+        }
 
 .navbar-brand {
     font-family: 'Poppins', sans-serif;
@@ -288,9 +288,9 @@ body {
     color: #1db954;
 }
 
-.navbar-brand:hover {
-    color: #17a94b;
-}
+    .navbar-brand:hover {
+        color: #17a94b;
+    }
 
 .btn-danger {
     background-color: #d9534f;
@@ -300,15 +300,15 @@ body {
     transition: background-color 0.3s ease;
 }
 
-.btn-danger:hover {
-    background-color: #c9302c;
-    color: white;
-}
+    .btn-danger:hover {
+        background-color: #c9302c;
+        color: white;
+    }
 
 /* Fix for Select2 dropdown text color */
 .select2-container--default .select2-results__option {
-    color: #000; 
-    background-color: #fff; 
+    color: #000;
+    background-color: #fff;
 }
 
 /* Highlight the selected item in the dropdown */
@@ -321,7 +321,7 @@ body {
 .select2-container--default .select2-selection--multiple {
     background-color: #fff;
     color: #000;
-    border: 1px solid #ced4da; 
+    border: 1px solid #ced4da;
 }
 
 .toast-body {
