@@ -44,7 +44,6 @@ namespace BeatStore_SoftUni.Services.Data
 
             return beats;
         }
-
         public async Task CreateBeatAsync(CreateBeatDTO model, Guid artistId)
         {
             var beat = new Beat
@@ -76,7 +75,6 @@ namespace BeatStore_SoftUni.Services.Data
         {
             return await this.genreRepository.GetAllAsync();
         }
-
         public async Task<BeatDetailsDTO?> GetBeatDetailsAsync(Guid id, Guid userId)
         {
             var beat = await this.beatRepository.GetAllAttached()
@@ -141,8 +139,6 @@ namespace BeatStore_SoftUni.Services.Data
                 return false;
             }
 
-;
-
             beat.Title = model.Title;
             beat.Price = model.Price;
             beat.AudioFileUrl = model.AudioFileUrl;
@@ -185,6 +181,5 @@ namespace BeatStore_SoftUni.Services.Data
 
             return await this.beatRepository.UpdateAsync(beat);
         }
-
     }
 }

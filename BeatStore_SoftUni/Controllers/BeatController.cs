@@ -113,8 +113,14 @@ namespace BeatStore_SoftUni.Controllers
 
             var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
 
-            var success = await this.beatService.EditBeatAsync(model, userId);
+            var beat = await this.beatService.GetBeatForEditAsync(model.Id, userId);
+            if (beat == null || !beat.IsActive)
+            {
+                TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
+                return RedirectToAction(nameof(Index));
+            }
 
+            var success = await this.beatService.EditBeatAsync(model, userId);
             if (!success)
             {
                 return Unauthorized();
@@ -128,8 +134,14 @@ namespace BeatStore_SoftUni.Controllers
         {
             var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
 
-            var success = await this.beatService.SoftDeleteBeatAsync(id, userId);
+            var beat = await this.beatService.GetBeatDetailsAsync(id, userId);
+            if (beat == null || !beat.IsActive)
+            {
+                TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
+                return RedirectToAction(nameof(Index));
+            }
 
+            var success = await this.beatService.SoftDeleteBeatAsync(id, userId);
             if (!success)
             {
                 return Unauthorized();
@@ -137,6 +149,5 @@ namespace BeatStore_SoftUni.Controllers
 
             return RedirectToAction(nameof(Index));
         }
-
     }
 }
