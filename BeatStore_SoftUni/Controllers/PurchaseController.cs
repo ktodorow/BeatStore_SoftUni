@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeatStore_SoftUni.Controllers
 {
     [Authorize]
-    public class PurchaseController : Controller
+    public class PurchaseController : BaseController
     {
         private readonly IPurchaseService purchaseService;
 
@@ -20,7 +20,11 @@ namespace BeatStore_SoftUni.Controllers
         [HttpGet]
         public async Task<IActionResult> Buy(Guid id)
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            if (!ValidateUserId(out var userId))
+            {
+                return RedirectToAction("Index", "Beat");
+            }
+
             var purchaseDetails = await purchaseService.GetPurchaseDetailsAsync(id, userId);
 
             if (purchaseDetails == null)
@@ -35,7 +39,11 @@ namespace BeatStore_SoftUni.Controllers
         [HttpPost]
         public async Task<IActionResult> PlaceOrder(Guid beatId)
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            if (!ValidateUserId(out var userId))
+            {
+                return RedirectToAction("Index", "Beat");
+            }
+
             var success = await purchaseService.PlaceDirectOrderAsync(beatId, userId);
 
             if (!success)
@@ -51,7 +59,11 @@ namespace BeatStore_SoftUni.Controllers
         [HttpGet]
         public async Task<IActionResult> BoughtBeats()
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            if (!ValidateUserId(out var userId))
+            {
+                return Unauthorized();
+            }
+
             var purchases = await purchaseService.GetPurchasesAsync(userId);
             return View(purchases);
         }

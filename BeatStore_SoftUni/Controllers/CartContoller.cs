@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeatStore_SoftUni.Controllers
 {
     [Authorize]
-    public class CartController : Controller
+    public class CartController : BaseController
     {
         private readonly ICartService cartService;
         private readonly IPurchaseService purchaseService;
@@ -22,7 +22,11 @@ namespace BeatStore_SoftUni.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            if (!ValidateUserId(out var userId))
+            {
+                return RedirectToAction("Index", "Beat");
+            }
+
             var cart = await cartService.GetCartAsync(userId);
             return View(cart);
         }
@@ -30,9 +34,11 @@ namespace BeatStore_SoftUni.Controllers
         [HttpPost]
         public async Task<JsonResult> AddToCart(Guid beatId)
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            if (!ValidateUserId(out var userId))
+            {
+                return Json(new { success = false, message = ErrUnableToRetrieveInformation });
+            }
 
-            // Check if the beat is already purchased
             var isPurchased = await purchaseService.IsBeatPurchasedAsync(userId, beatId);
 
             if (isPurchased)
@@ -42,20 +48,17 @@ namespace BeatStore_SoftUni.Controllers
 
             var success = await cartService.AddToCartAsync(userId, beatId);
 
-            if (success)
-            {
-                return Json(new { success = true, message = ItemAddedSuccessfully });
-            }
-            else
-            {
-                return Json(new { success = false, message = ErrItemAlreadyAddedInCart });
-            }
+            return Json(new { success, message = success ? ItemAddedSuccessfully : ErrItemAlreadyAddedInCart });
         }
 
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(Guid beatId)
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            if (!ValidateUserId(out var userId))
+            {
+                return RedirectToAction("Index", "Beat");
+            }
+
             await cartService.RemoveFromCartAsync(userId, beatId);
             return RedirectToAction(nameof(Index));
         }
@@ -63,8 +66,12 @@ namespace BeatStore_SoftUni.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout()
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
-            var success = await purchaseService.CheckoutCartAsync(userId); // Use PurchaseService directly
+            if (!ValidateUserId(out var userId))
+            {
+                return RedirectToAction("Index", "Beat");
+            }
+
+            var success = await purchaseService.CheckoutCartAsync(userId);
 
             if (!success)
             {
@@ -79,9 +86,12 @@ namespace BeatStore_SoftUni.Controllers
         [HttpGet]
         public async Task<JsonResult> GetCartStatus()
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
-            var cart = await cartService.GetCartAsync(userId);
+            if (!ValidateUserId(out var userId))
+            {
+                return Json(new { hasItems = false });
+            }
 
+            var cart = await cartService.GetCartAsync(userId);
             return Json(new { hasItems = cart.Items.Any() });
         }
     }

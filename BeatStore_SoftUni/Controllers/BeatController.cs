@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BeatStore_SoftUni.Controllers
 {
     [Authorize]
-    public class BeatController : Controller
+    public class BeatController : BaseController
     {
         private readonly IBeatService beatService;
 
@@ -20,15 +20,14 @@ namespace BeatStore_SoftUni.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var beats = await this.beatService.GetAllBeatsAsync();
+            var beats = await beatService.GetAllBeatsAsync();
             return View(beats);
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var genres = await this.beatService.GetGenresAsync();
-            ViewBag.Genres = genres;
+            ViewBag.Genres = await beatService.GetGenresAsync();
             return View();
         }
 
@@ -38,22 +37,16 @@ namespace BeatStore_SoftUni.Controllers
         {
             if (!ModelState.IsValid)
             {
-                var genres = await this.beatService.GetGenresAsync();
-                ViewBag.Genres = genres;
+                ViewBag.Genres = await beatService.GetGenresAsync();
                 return View(model);
             }
 
-            var artistIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(artistIdClaim) || !Guid.TryParse(artistIdClaim, out var artistId))
+            if (!ValidateUserId(out var userId))
             {
-                ModelState.AddModelError("", ErrUnableToRetrieveInformation);
-                var genres = await this.beatService.GetGenresAsync();
-                ViewBag.Genres = genres;
-                return View(model);
+                return RedirectToAction("Index", "Beat");
             }
 
-            await this.beatService.CreateBeatAsync(model, artistId);
+            await beatService.CreateBeatAsync(model, userId);
             return RedirectToAction(nameof(Index));
         }
 
@@ -65,86 +58,34 @@ namespace BeatStore_SoftUni.Controllers
                 return NotFound();
             }
 
-            var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+            if (!ValidateUserId(out var userId))
             {
-                return Unauthorized(); 
+                return Unauthorized();
             }
 
-            var beatDetails = await this.beatService.GetBeatDetailsAsync(beatId, userId);
+            var beatDetails = await beatService.GetBeatDetailsAsync(beatId, userId);
             if (beatDetails == null || !beatDetails.IsActive)
-            {
-                if (beatDetails == null || !beatDetails.IsActive)
-                {
-                    TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
-                    return RedirectToAction("Index", "Beat");
-                }
-            }
-
-            return View(beatDetails);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
-
-            var model = await this.beatService.GetBeatForEditAsync(id, userId);
-
-            if (model == null || !model.IsActive)
             {
                 TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
                 return RedirectToAction("Index", "Beat");
             }
 
-            ViewBag.Genres = await this.beatService.GetGenresAsync();
-            return View(model);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(EditBeatDTO model)
-        {
-            if (!ModelState.IsValid)
-            {
-                ViewBag.Genres = await this.beatService.GetGenresAsync();
-                return View(model);
-            }
-
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
-
-            var beat = await this.beatService.GetBeatForEditAsync(model.Id, userId);
-            if (beat == null || !beat.IsActive)
-            {
-                TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
-                return RedirectToAction(nameof(Index));
-            }
-
-            var success = await this.beatService.EditBeatAsync(model, userId);
-            if (!success)
-            {
-                return Unauthorized();
-            }
-
-            return RedirectToAction(nameof(Index));
+            return View(beatDetails);
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
+            if (!ValidateUserId(out var userId))
+            {
+                return Unauthorized();
+            }
 
-            var beat = await this.beatService.GetBeatDetailsAsync(id, userId);
-            if (beat == null || !beat.IsActive)
+            var success = await beatService.SoftDeleteBeatAsync(id, userId);
+            if (!success)
             {
                 TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
                 return RedirectToAction(nameof(Index));
-            }
-
-            var success = await this.beatService.SoftDeleteBeatAsync(id, userId);
-            if (!success)
-            {
-                return Unauthorized();
             }
 
             return RedirectToAction(nameof(Index));
