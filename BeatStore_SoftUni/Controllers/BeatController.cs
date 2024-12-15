@@ -90,5 +90,56 @@ namespace BeatStore_SoftUni.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            if (!ValidateUserId(out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var model = await this.beatService.GetBeatForEditAsync(id, userId);
+
+            if (model == null || !model.IsActive)
+            {
+                TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
+                return RedirectToAction("Index", "Beat");
+            }
+
+            ViewBag.Genres = await this.beatService.GetGenresAsync();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(EditBeatDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Genres = await this.beatService.GetGenresAsync();
+                return View(model);
+            }
+
+            if (!ValidateUserId(out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var beat = await this.beatService.GetBeatForEditAsync(model.Id, userId);
+            if (beat == null || !beat.IsActive)
+            {
+                TempData["ErrorMessage"] = ErrBeatNoLongerAvailable;
+                return RedirectToAction(nameof(Index));
+            }
+
+            var success = await this.beatService.EditBeatAsync(model, userId);
+            if (!success)
+            {
+                return Unauthorized();
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
     }
 }
