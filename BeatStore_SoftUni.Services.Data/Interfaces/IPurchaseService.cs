@@ -5,7 +5,10 @@ namespace BeatStore_SoftUni.Services.Data.Interfaces
     public interface IPurchaseService
     {
         Task<PurchaseDTO?> GetPurchaseDetailsAsync(Guid beatId, Guid userId);
+        Task<bool> CheckoutCartAsync(Guid userId);
         Task<bool> PlaceDirectOrderAsync(Guid beatId, Guid userId);
         Task<IEnumerable<PurchaseDTO>> GetPurchasesAsync(Guid userId); // Add this method
+        Task<bool> IsBeatPurchasedAsync(Guid userId, Guid beatId);
+
     }
 }

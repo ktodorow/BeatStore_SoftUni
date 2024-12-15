@@ -2,11 +2,8 @@
 using static BeatStore_SoftUni.Common.Messages;
 using static BeatStore_SoftUni.Common.ErrorMessages;
 
-using System.Threading.Tasks;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace BeatStore_SoftUni.Controllers
 {
@@ -14,10 +11,12 @@ namespace BeatStore_SoftUni.Controllers
     public class CartController : Controller
     {
         private readonly ICartService cartService;
+        private readonly IPurchaseService purchaseService;
 
-        public CartController(ICartService cartService)
+        public CartController(ICartService cartService, IPurchaseService purchaseService)
         {
             this.cartService = cartService;
+            this.purchaseService = purchaseService;
         }
 
         [HttpGet]
@@ -34,7 +33,7 @@ namespace BeatStore_SoftUni.Controllers
             var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
 
             // Check if the beat is already purchased
-            var isPurchased = await cartService.IsBeatPurchasedAsync(userId, beatId);
+            var isPurchased = await purchaseService.IsBeatPurchasedAsync(userId, beatId);
 
             if (isPurchased)
             {
@@ -65,7 +64,7 @@ namespace BeatStore_SoftUni.Controllers
         public async Task<IActionResult> Checkout()
         {
             var userId = Guid.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)!.Value);
-            var success = await cartService.CheckoutCartAsync(userId);
+            var success = await purchaseService.CheckoutCartAsync(userId); // Use PurchaseService directly
 
             if (!success)
             {
@@ -73,15 +72,7 @@ namespace BeatStore_SoftUni.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            if (TempData["WarningMessage"] != null)
-            {
-                TempData["SuccessMessage"] = CompletePurchasePartly;
-            }
-            else
-            {
-                TempData["SuccessMessage"] = CompletePurchase;
-            }
-
+            TempData["SuccessMessage"] = CompletePurchase;
             return RedirectToAction(nameof(Index));
         }
 
@@ -93,6 +84,5 @@ namespace BeatStore_SoftUni.Controllers
 
             return Json(new { hasItems = cart.Items.Any() });
         }
-
     }
 }

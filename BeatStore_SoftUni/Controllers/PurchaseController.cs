@@ -5,9 +5,6 @@ using static BeatStore_SoftUni.Common.ErrorMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using System.Threading.Tasks;
-
-
 namespace BeatStore_SoftUni.Controllers
 {
     [Authorize]
@@ -51,7 +48,6 @@ namespace BeatStore_SoftUni.Controllers
             return RedirectToAction("BoughtBeats");
         }
 
-
         [HttpGet]
         public async Task<IActionResult> BoughtBeats()
         {
@@ -59,6 +55,5 @@ namespace BeatStore_SoftUni.Controllers
             var purchases = await purchaseService.GetPurchasesAsync(userId);
             return View(purchases);
         }
-
     }
 }

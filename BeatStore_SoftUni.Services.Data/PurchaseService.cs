@@ -5,7 +5,6 @@ using BeatStore_SoftUni.ViewModels.PurchaseDtos;
 
 using Microsoft.EntityFrameworkCore;
 
-
 namespace BeatStore_SoftUni.Services.Data
 {
     public class PurchaseService : IPurchaseService
@@ -13,15 +12,21 @@ namespace BeatStore_SoftUni.Services.Data
         private readonly IRepository<Purchase, Guid> purchaseRepository;
         private readonly IRepository<ApplicationUser, Guid> userRepository;
         private readonly IRepository<Beat, Guid> beatRepository;
+        private readonly IRepository<Cart, Guid> cartRepository;
+        private readonly IRepository<CartItem, Guid> cartItemRepository;
 
         public PurchaseService(
             IRepository<Purchase, Guid> purchaseRepository,
             IRepository<ApplicationUser, Guid> userRepository,
-            IRepository<Beat, Guid> beatRepository)
+            IRepository<Beat, Guid> beatRepository,
+            IRepository<Cart, Guid> cartRepository,
+            IRepository<CartItem, Guid> cartItemRepository)
         {
             this.purchaseRepository = purchaseRepository;
             this.userRepository = userRepository;
             this.beatRepository = beatRepository;
+            this.cartRepository = cartRepository;
+            this.cartItemRepository = cartItemRepository;
         }
 
         public async Task<PurchaseDTO?> GetPurchaseDetailsAsync(Guid beatId, Guid userId)
@@ -69,6 +74,66 @@ namespace BeatStore_SoftUni.Services.Data
             return true;
         }
 
+        public async Task<bool> CheckoutCartAsync(Guid userId)
+        {
+            var cart = await cartRepository.GetAllAttached()
+                .Where(c => c.UserId == userId)
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Beat)
+                .FirstOrDefaultAsync();
+
+            if (cart == null || !cart.CartItems.Any()) return false;
+
+            var user = await userRepository.GetByIdAsync(userId);
+
+            var purchasedBeatIds = await purchaseRepository.GetAllAttached()
+                .Where(p => p.UserId == userId)
+                .Select(p => p.BeatId)
+                .ToListAsync();
+
+            var itemsToPurchase = cart.CartItems
+                .Where(ci => !purchasedBeatIds.Contains(ci.BeatId))
+                .ToList();
+
+            var alreadyPurchasedItems = cart.CartItems
+                .Where(ci => purchasedBeatIds.Contains(ci.BeatId))
+                .Select(ci => ci.Beat.Title)
+                .ToList();
+
+            if (!itemsToPurchase.Any()) return false; // Nothing to purchase
+
+            var totalPrice = itemsToPurchase.Sum(ci => ci.Beat.Price);
+
+            if (user.Balance < totalPrice) return false;
+
+            user.Balance -= totalPrice;
+            await userRepository.UpdateAsync(user);
+
+            foreach (var item in itemsToPurchase)
+            {
+                await cartItemRepository.DeleteAsync(item);
+
+                await purchaseRepository.AddAsync(new Purchase
+                {
+                    UserId = userId,
+                    BeatId = item.BeatId,
+                    Price = item.Beat.Price,
+                    DatePurchased = DateTime.UtcNow
+                });
+            }
+
+            //foreach (var item in alreadyPurchasedItems)
+            //{
+            //    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Beat.Title == item);
+            //    if (cartItem != null)
+            //    {
+            //        await cartItemRepository.DeleteAsync(cartItem);
+            //    }
+            //}
+
+            return true;
+        }
+
         public async Task<IEnumerable<PurchaseDTO>> GetPurchasesAsync(Guid userId)
         {
             var purchases = await Task.Run(() =>
@@ -86,6 +151,12 @@ namespace BeatStore_SoftUni.Services.Data
             );
 
             return purchases;
+        }
+
+        public async Task<bool> IsBeatPurchasedAsync(Guid userId, Guid beatId)
+        {
+            return await purchaseRepository.GetAllAttached()
+                .AnyAsync(p => p.UserId == userId && p.BeatId == beatId);
         }
     }
 }

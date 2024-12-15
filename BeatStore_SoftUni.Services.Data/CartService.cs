@@ -60,8 +60,6 @@ namespace BeatStore_SoftUni.Services.Data
                     .ToList()
             };
         }
-
-
         public async Task<bool> AddToCartAsync(Guid userId, Guid beatId)
         {
             var isPurchased = await purchaseRepository.GetAllAttached()
@@ -105,71 +103,6 @@ namespace BeatStore_SoftUni.Services.Data
                     await cartItemRepository.DeleteAsync(cartItem);
                 }
             }
-        }
-
-        public async Task<bool> CheckoutCartAsync(Guid userId)
-        {
-            var cart = await cartRepository.GetAllAttached()
-                .Where(c => c.UserId == userId)
-                .Include(c => c.CartItems)
-                .ThenInclude(ci => ci.Beat)
-                .FirstOrDefaultAsync();
-
-            if (cart == null || !cart.CartItems.Any()) return false;
-
-            var user = await userRepository.GetByIdAsync(userId);
-
-            var purchasedBeatIds = await purchaseRepository.GetAllAttached()
-                .Where(p => p.UserId == userId)
-                .Select(p => p.BeatId)
-                .ToListAsync();
-
-            var itemsToPurchase = cart.CartItems
-                .Where(ci => !purchasedBeatIds.Contains(ci.BeatId))
-                .ToList();
-
-            var alreadyPurchasedItems = cart.CartItems
-                .Where(ci => purchasedBeatIds.Contains(ci.BeatId))
-                .Select(ci => ci.Beat.Title)
-                .ToList();
-
-            if (!itemsToPurchase.Any()) return false; // Nothing to purchase
-
-            var totalPrice = itemsToPurchase.Sum(ci => ci.Beat.Price);
-
-            if (user.Balance < totalPrice) return false; 
-
-            user.Balance -= totalPrice;
-            await userRepository.UpdateAsync(user);
-
-            foreach (var item in itemsToPurchase)
-            {
-                await cartItemRepository.DeleteAsync(item);
-
-                await purchaseRepository.AddAsync(new Purchase
-                {
-                    UserId = userId,
-                    BeatId = item.BeatId,
-                    Price = item.Beat.Price,
-                    DatePurchased = DateTime.UtcNow
-                });
-            }
-
-            //foreach (var item in alreadyPurchasedItems)
-            //{
-            //    var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Beat.Title == item);
-            //    if (cartItem != null)
-            //    {
-            //        await cartItemRepository.DeleteAsync(cartItem);
-            //    }
-            //}
-
-            return true;
-        }
-        public async Task<bool> IsBeatPurchasedAsync(Guid userId, Guid beatId)
-        {
-            return await purchaseRepository.GetAllAttached()
-                .AnyAsync(p => p.UserId == userId && p.BeatId == beatId);
         }
     }
 }
