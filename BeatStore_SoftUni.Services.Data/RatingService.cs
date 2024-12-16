@@ -6,15 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeatStore_SoftUni.Services.Data
 {
-    public class RatingService : IRatingService
+    public class RatingService(IRepository<Rating, Guid> ratingRepository) : IRatingService
     {
-        private readonly IRepository<Rating, Guid> ratingRepository;
-
-        public RatingService(IRepository<Rating, Guid> ratingRepository)
-        {
-            this.ratingRepository = ratingRepository;
-        }
-
         public async Task<bool> AddOrUpdateRatingAsync(RatingDTO ratingDto)
         {
             var existingRating = await ratingRepository.GetAllAttached()
