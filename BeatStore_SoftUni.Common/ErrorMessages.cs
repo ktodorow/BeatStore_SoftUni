@@ -13,6 +13,6 @@ namespace BeatStore_SoftUni.Common
         public const string ErrPurchase = "You either don't have enough balance or have already purchased this beat.";
         public const string ErrMigration = "Error migrating database: ";
         public const string ErrUserInfo = "Unable to retrieve user information.";
-
+        public const string ErrAlreadyRated = "You have already rated this beat.";
     }
 }

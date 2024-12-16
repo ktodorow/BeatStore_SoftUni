@@ -6,49 +6,54 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BeatStore_SoftUni.Services.Data
 {
-    public class RatingService(IRepository<Rating, Guid> ratingRepository) : IRatingService
+    public class RatingService : IRatingService
     {
-        public async Task<bool> AddOrUpdateRatingAsync(RatingDTO ratingDto)
+        private readonly IRepository<Rating, Guid> ratingRepository;
+
+        public RatingService(IRepository<Rating, Guid> ratingRepository)
         {
-            var existingRating = await ratingRepository.GetAllAttached()
-                .FirstOrDefaultAsync(r => r.UserId == ratingDto.UserId && r.BeatId == ratingDto.BeatId);
+            this.ratingRepository = ratingRepository;
+        }
 
-            if (existingRating != null)
+        public async Task<bool> AddRatingAsync(RatingDTO ratingDto)
+        {
+            var existingRating = await ratingRepository
+                .GetAllAttached()
+                .AnyAsync(r => r.UserId == ratingDto.UserId && r.BeatId == ratingDto.BeatId);
+
+            if (existingRating)
             {
-                existingRating.Value = ratingDto.Value;
-                existingRating.DateRated = DateTime.UtcNow;
-                await ratingRepository.UpdateAsync(existingRating);
-            }
-            else
-            {
-                var newRating = new Rating
-                {
-                    Id = Guid.NewGuid(),
-                    UserId = ratingDto.UserId,
-                    BeatId = ratingDto.BeatId,
-                    Value = ratingDto.Value,
-                    DateRated = DateTime.UtcNow
-                };
-                await ratingRepository.AddAsync(newRating);
+                return false; 
             }
 
+            var newRating = new Rating
+            {
+                Id = Guid.NewGuid(),
+                UserId = ratingDto.UserId,
+                BeatId = ratingDto.BeatId,
+                Value = ratingDto.Value,
+                DateRated = DateTime.UtcNow
+            };
+
+            await ratingRepository.AddAsync(newRating);
             return true;
         }
 
         public async Task<double> GetAverageRatingAsync(Guid beatId)
         {
-            var ratings = await ratingRepository.GetAllAttached()
+            var ratings = await ratingRepository
+                .GetAllAttached()
                 .Where(r => r.BeatId == beatId)
-                .Select(r => r.Value)
                 .ToListAsync();
 
-            return ratings.Any() ? ratings.Average() : 0;
+            return ratings.Any() ? ratings.Average(r => r.Value) : 0.0;
         }
 
-        public async Task<int?> GetUserRatingAsync(Guid userId, Guid beatId)
+        public async Task<int?> GetUserRatingAsync(Guid beatId, Guid userId)
         {
-            var rating = await ratingRepository.GetAllAttached()
-                .FirstOrDefaultAsync(r => r.UserId == userId && r.BeatId == beatId);
+            var rating = await ratingRepository
+                .GetAllAttached()
+                .FirstOrDefaultAsync(r => r.BeatId == beatId && r.UserId == userId);
 
             return rating?.Value;
         }

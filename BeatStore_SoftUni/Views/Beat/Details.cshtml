@@ -7,7 +7,8 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="~/js/addToCart.js" asp-append-version="true"></script>
-    <script src="~/js/deleteConfirmation.js"></script>
+    <script src="~/js/deleteConfirmation.js" asp-append-version="true"></script>
+    <script src="~/js/rating.js"></script>
 }
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -56,6 +57,22 @@
                         <input type="hidden" name="beatId" value="@Model.Id" />
                         <button type="button" id="addToCartButton" class="btn btn-primary">Add to Cart</button>
                     </form>
+
+                    <div class="rating-section">
+                        <h3>Rate this Beat</h3>
+                        <input type="hidden" id="beat-id" value="@Model.Id" />
+                        <div id="user-rating">
+                            <partial name="~/Views/Rating/_UserRating.cshtml" model="0" />
+                        </div>
+                    </div>
+
+                    <div class="average-rating-section mt-3">
+                        <h3>
+                            Average Rating: <span id="average-rating">
+                                <partial name="~/Views/Rating/_AverageRating.cshtml" model="0.0" />
+                            </span>
+                        </h3>
+                    </div>
                 }
             </div>
         </div>

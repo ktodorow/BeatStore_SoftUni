@@ -113,3 +113,15 @@ h1 {
 .comment-body {
     margin-left: 50px;
 }
+
+.fa-star {
+    font-size: 24px;
+    color: #ddd;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.fa-star.checked,
+.fa-star:hover {
+    color: #ffa500;
+}

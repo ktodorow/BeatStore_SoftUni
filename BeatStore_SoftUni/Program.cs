@@ -32,6 +32,8 @@ builder.Services.AddScoped<IBeatService, BeatService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<ICommentService, CommentService>();
+builder.Services.AddScoped<IRatingService, RatingService>();
+
 
 builder.Services.AddControllersWithViews();
  
