@@ -38,9 +38,7 @@
     }
 
     function resetStars() {
-        const userStars = document.querySelectorAll(".fa-star");
-        userStars.forEach(star => star.classList.remove("checked"));
-        fetchUserRating(); // Reset to the saved user rating
+        fetchUserRating(); 
     }
 
     function submitRating(value) {
@@ -54,9 +52,35 @@
                 if (data.success) {
                     fetchAverageRating();
                     fetchUserRating();
+
+                    Swal.fire({
+                        title: "Thank You!",
+                        text: data.message,
+                        icon: "success",
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+
                 } else {
-                    alert(data.message);
+                    Swal.fire({
+                        title: "Oops!",
+                        text: data.message,
+                        icon: "error",
+                        timer: 1500,
+                        showConfirmButton: false
+                    });
                 }
+            })
+            .catch(error => {
+                console.error("Error submitting rating:", error);
+
+                Swal.fire({
+                    title: "Error!",
+                    text: data.message,
+                    icon: "error",
+                    timer: 1500,
+                    showConfirmButton: falsew
+                });
             });
     }
 });

@@ -30,7 +30,7 @@ namespace BeatStore_SoftUni.Controllers
 
             if (!success)
             {
-                return Json(new { success = false, message =  });
+                return Json(new { success = false, message = ErrAlreadyRated });
             }
 
             var averageRating = await ratingService.GetAverageRatingAsync(ratingDto.BeatId);
