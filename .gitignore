@@ -29,6 +29,7 @@ x64/
 *.pdb
 *.pgc
 *.pgd
+*.idea
 *.rsp
 *.sbr
 *.tlb
