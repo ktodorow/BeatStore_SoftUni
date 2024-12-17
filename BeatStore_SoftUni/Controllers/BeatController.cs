@@ -18,12 +18,18 @@ namespace BeatStore_SoftUni.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchQuery, Guid? genreId, string sortOption)
         {
-            var beats = await beatService.GetAllBeatsAsync();
+            ViewBag.Genres = await beatService.GetGenresAsync();
+
+            var beats = await beatService.SearchBeatsAsync(searchQuery, genreId, sortOption);
+
+            ViewBag.SearchQuery = searchQuery;
+            ViewBag.SelectedGenreId = genreId;
+            ViewBag.SortOption = sortOption;
+
             return View(beats);
         }
-
         [HttpGet]
         public async Task<IActionResult> Create()
         {

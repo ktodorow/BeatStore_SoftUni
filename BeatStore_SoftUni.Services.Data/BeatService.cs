@@ -181,5 +181,45 @@ namespace BeatStore_SoftUni.Services.Data
 
             return await this.beatRepository.UpdateAsync(beat);
         }
+        
+        public async Task<IEnumerable<BeatIndexDTO>> SearchBeatsAsync(string searchQuery, Guid? genreId, string sortOption)
+        {
+            var query = this.beatRepository.GetAllAttached()
+                .Include(b => b.Artist)
+                .Include(b => b.BeatGenres).ThenInclude(bg => bg.Genre)
+                .Where(b => b.IsActive);
+
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                query = query.Where(b => b.Title.Contains(searchQuery) || b.Artist.UserName.Contains(searchQuery));
+            }
+
+            if (genreId.HasValue)
+            {
+                query = query.Where(b => b.BeatGenres.Any(bg => bg.GenreId == genreId.Value));
+            }
+
+            query = sortOption switch
+            {
+                "A-Z" => query.OrderBy(b => b.Title),
+                "Z-A" => query.OrderByDescending(b => b.Title),
+                _ => query.OrderByDescending(b => b.DateUploaded)
+            };
+
+            var beats = await query.Select(b => new BeatIndexDTO
+            {
+                Id = b.Id,
+                Title = b.Title,
+                Genre = string.Join(", ", b.BeatGenres.Select(bg => bg.Genre.Name)),
+                CoverArtUrl = b.CoverArtUrl!,
+                Price = b.Price,
+                DateUploaded = b.DateUploaded,
+                AudioFileUrl = b.AudioFileUrl,
+                ArtistUsername = b.Artist.UserName,
+                IsActive = b.IsActive
+            }).ToListAsync();
+
+            return beats;
+        }
     }
 }

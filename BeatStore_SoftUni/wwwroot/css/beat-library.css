@@ -132,3 +132,12 @@
     transform: scale(0.95) !important;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2) !important;
 }
+
+form .row {
+    margin-bottom: 1rem;
+}
+
+form .form-control,
+form .form-select {
+    border-radius: 5px;
+}

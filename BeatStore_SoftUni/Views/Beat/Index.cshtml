@@ -12,7 +12,6 @@
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
-
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055;">
@@ -34,13 +33,52 @@
     </a>
 </div>
 
+<form method="get" class="mb-4">
+    <div class="row align-items-end">
+        <!-- Search Bar -->
+        <div class="col-md-4">
+            <label for="searchQuery" class="form-label">Search Beats</label>
+            <input type="text" name="searchQuery" class="form-control" placeholder="Search by title or artist..." value="@ViewBag.SearchQuery" />
+        </div>
+
+        <!-- Genre Dropdown -->
+        <div class="col-md-4">
+            <label for="genreId" class="form-label">Filter by Genre</label>
+            <select name="genreId" class="form-select">
+                <option value="">All Genres</option>
+                @foreach (var genre in (IEnumerable<BeatStore_SoftUni.Data.Models.Genre>)ViewBag.Genres)
+                {
+                    <option value="@genre.Id" selected="@(ViewBag.SelectedGenreId == genre.Id)">
+                        @genre.Name
+                    </option>
+                }
+            </select>
+        </div>
+
+        <div class="col-md-3">
+            <label for="sortOption" class="form-label">Sort By</label>
+            <select name="sortOption" class="form-select">
+                <option value="">Newest First</option>
+                <option value="A-Z" selected="@(ViewBag.SortOption == "A-Z")">A - Z</option>
+                <option value="Z-A" selected="@(ViewBag.SortOption == "Z-A")">Z - A</option>
+            </select>
+        </div>
+
+        <div class="col-md-1">
+            <button type="submit" class="btn btn-primary w-100">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+</form>
+
 <div class="library-container">
     @foreach (var beat in Model.Where(b => b.IsActive))
     {
-        <div class="library-card" 
-             data-audio-url="@beat.AudioFileUrl" 
-             data-title="@beat.Title" 
-             data-cover="@beat.CoverArtUrl" 
+        <div class="library-card"
+             data-audio-url="@beat.AudioFileUrl"
+             data-title="@beat.Title"
+             data-cover="@beat.CoverArtUrl"
              data-artist="@beat.ArtistUsername"
              data-details-url="@Url.Action("Details", "Beat", new { id = beat.Id })">
             <div class="cover-wrapper">
@@ -54,7 +92,7 @@
             <div class="card-body">
                 <h5 class="card-title">@beat.Title</h5>
                 <p class="card-text">
-                    @if (beat.Genre != string.Empty)
+                    @if (!string.IsNullOrEmpty(beat.Genre))
                     {
                         <strong>Genre:</strong> @beat.Genre<br>
                     }
